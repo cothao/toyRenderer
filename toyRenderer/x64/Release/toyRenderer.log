@@ -1,0 +1,515 @@
+﻿  camera.cpp
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\camera.cpp(14,11): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\camera.cpp(15,11): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\camera.cpp(18,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\camera.cpp(19,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\camera.cpp(21,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\camera.cpp(22,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  main.cpp
+  model.cpp
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(9,2): error C2011: 'glm::qualifier': 'enum' type redefinition
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\qualifier.hpp(8,7):
+      see declaration of 'glm::qualifier'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(35,2): error C2572: 'glm::vec': redefinition of default argument: parameter 3
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(35,66):
+      see declaration of 'glm::vec'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(36,2): error C2572: 'glm::mat': redefinition of default argument: parameter 4
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(36,78):
+      see declaration of 'glm::mat'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(37,2): error C2572: 'glm::qua': redefinition of default argument: parameter 2
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(37,54):
+      see declaration of 'glm::qua'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(62,3): error C2953: 'glm::detail::is_aligned': class template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(59,9):
+      see declaration of 'glm::detail::is_aligned'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(90,3): error C2953: 'glm::detail::storage': class template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(85,9):
+      see declaration of 'glm::detail::storage'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(99,4): error C2976: 'glm::detail::storage': too few template arguments
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(94,10):
+      see declaration of 'glm::detail::storage'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(107,4): error C3855: 'glm::detail::storage': template parameter 'L' is incompatible with the declaration
+  (compiling source file 'model.cpp')
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(107,4): error C2976: 'glm::detail::storage': too few template arguments
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(102,10):
+      see declaration of 'glm::detail::storage'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(191,2): error C2011: 'glm::detail::genTypeEnum': 'enum' type redefinition
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\qualifier.hpp(190,7):
+      see declaration of 'glm::detail::genTypeEnum'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(199,4): error C2953: 'glm::detail::genTypeTrait': class template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(198,9):
+      see declaration of 'glm::detail::genTypeTrait'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(205,3): error C3855: 'glm::detail::genTypeTrait': template parameter 'genType' is incompatible with the declaration
+  (compiling source file 'model.cpp')
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(205,3): error C2977: 'glm::detail::genTypeTrait': too many template arguments
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(202,9):
+      see declaration of 'glm::detail::genTypeTrait'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(210,3): error C2953: 'glm::detail::init_gentype': class template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(208,9):
+      see declaration of 'glm::detail::init_gentype'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(219,3): error C2976: 'glm::detail::init_gentype': too few template arguments
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(213,9):
+      see declaration of 'glm::detail::init_gentype'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(228,3): error C2976: 'glm::detail::init_gentype': too few template arguments
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\qualifier.hpp(222,9):
+      see declaration of 'glm::detail::init_gentype'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.hpp(217,3): error C2953: 'glm::vec<2,T,Q>': class template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(17,9):
+      see declaration of 'glm::vec<2,T,Q>'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\compute_vector_relational.hpp(17,3): error C2953: 'glm::detail::compute_equal': class template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\compute_vector_relational.hpp(11,9):
+      see declaration of 'glm::detail::compute_equal'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(25,49): error C2995: 'glm::vec<2,T,Q>::vec(const glm::vec<2,T,P> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(97,17):
+      see declaration of 'glm::vec<2,T,Q>::vec'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(32,49): error C2995: 'glm::vec<2,T,Q>::vec(T)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(101,17):
+      see declaration of 'glm::vec<2,T,Q>::vec'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(37,49): error C2995: 'glm::vec<2,T,Q>::vec(T,T)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(102,17):
+      see declaration of 'glm::vec<2,T,Q>::vec'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(45,49): error C2995: 'glm::vec<2,T,Q>::vec(const glm::vec<1,U,P> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(107,17):
+      see declaration of 'glm::vec<2,T,Q>::vec'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(52,49): error C2995: 'glm::vec<2,T,Q>::vec(A,B)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(111,17):
+      see declaration of 'glm::vec<2,T,Q>::vec'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(59,49): error C2995: 'glm::vec<2,T,Q>::vec(const glm::vec<1,A,Q> &,B)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(113,17):
+      see declaration of 'glm::vec<2,T,Q>::vec'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(66,49): error C2995: 'glm::vec<2,T,Q>::vec(A,const glm::vec<1,B,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(115,17):
+      see declaration of 'glm::vec<2,T,Q>::vec'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(73,49): error C2995: 'glm::vec<2,T,Q>::vec(const glm::vec<1,A,Q> &,const glm::vec<1,B,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(117,17):
+      see declaration of 'glm::vec<2,T,Q>::vec'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(82,49): error C2995: 'glm::vec<2,T,Q>::vec(const glm::vec<2,U,P> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(130,17):
+      see declaration of 'glm::vec<2,T,Q>::vec'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(89,49): error C2995: 'glm::vec<2,T,Q>::vec(const glm::vec<3,U,P> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(123,17):
+      see declaration of 'glm::vec<2,T,Q>::vec'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(96,49): error C2995: 'glm::vec<2,T,Q>::vec(const glm::vec<4,U,P> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(126,17):
+      see declaration of 'glm::vec<2,T,Q>::vec'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(104,53): error C2995: 'T &glm::vec<2,T,Q>::operator [](glm::vec<2,T,Q>::length_type)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(89,34):
+      see declaration of 'glm::vec<2,T,Q>::operator []'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(118,58): error C2995: 'const T &glm::vec<2,T,Q>::operator [](glm::vec<2,T,Q>::length_type) const': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(90,40):
+      see declaration of 'glm::vec<2,T,Q>::operator []'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(145,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator =(const glm::vec<2,U,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(146,46):
+      see declaration of 'glm::vec<2,T,Q>::operator ='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(154,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator +=(U)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(148,46):
+      see declaration of 'glm::vec<2,T,Q>::operator +='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(163,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator +=(const glm::vec<1,A,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(150,46):
+      see declaration of 'glm::vec<2,T,Q>::operator +='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(172,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator +=(const glm::vec<2,U,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(152,46):
+      see declaration of 'glm::vec<2,T,Q>::operator +='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(181,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator -=(U)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(154,46):
+      see declaration of 'glm::vec<2,T,Q>::operator -='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(190,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator -=(const glm::vec<1,A,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(156,46):
+      see declaration of 'glm::vec<2,T,Q>::operator -='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(199,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator -=(const glm::vec<2,U,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(158,46):
+      see declaration of 'glm::vec<2,T,Q>::operator -='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(208,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator *=(U)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(160,46):
+      see declaration of 'glm::vec<2,T,Q>::operator *='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(217,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator *=(const glm::vec<1,A,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(162,46):
+      see declaration of 'glm::vec<2,T,Q>::operator *='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(226,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator *=(const glm::vec<2,U,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(164,46):
+      see declaration of 'glm::vec<2,T,Q>::operator *='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(235,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator /=(U)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(166,46):
+      see declaration of 'glm::vec<2,T,Q>::operator /='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(244,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator /=(const glm::vec<1,A,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(168,46):
+      see declaration of 'glm::vec<2,T,Q>::operator /='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(253,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator /=(const glm::vec<2,U,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(170,46):
+      see declaration of 'glm::vec<2,T,Q>::operator /='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(263,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator ++(void)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(174,46):
+      see declaration of 'glm::vec<2,T,Q>::operator ++'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(271,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator --(void)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(175,46):
+      see declaration of 'glm::vec<2,T,Q>::operator --'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(279,62): error C2995: 'glm::vec<2,T,Q> glm::vec<2,T,Q>::operator ++(int)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(176,44):
+      see declaration of 'glm::vec<2,T,Q>::operator ++'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(287,62): error C2995: 'glm::vec<2,T,Q> glm::vec<2,T,Q>::operator --(int)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(177,44):
+      see declaration of 'glm::vec<2,T,Q>::operator --'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(298,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator %=(U)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(182,46):
+      see declaration of 'glm::vec<2,T,Q>::operator %='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(307,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator %=(const glm::vec<1,A,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(184,46):
+      see declaration of 'glm::vec<2,T,Q>::operator %='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(316,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator %=(const glm::vec<2,U,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(186,46):
+      see declaration of 'glm::vec<2,T,Q>::operator %='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(325,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator &=(U)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(188,46):
+      see declaration of 'glm::vec<2,T,Q>::operator &='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(334,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator &=(const glm::vec<1,A,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(190,46):
+      see declaration of 'glm::vec<2,T,Q>::operator &='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(343,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator &=(const glm::vec<2,U,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(192,46):
+      see declaration of 'glm::vec<2,T,Q>::operator &='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(352,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator |=(U)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(194,46):
+      see declaration of 'glm::vec<2,T,Q>::operator |='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(361,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator |=(const glm::vec<1,A,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(196,46):
+      see declaration of 'glm::vec<2,T,Q>::operator |='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(370,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator |=(const glm::vec<2,U,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(198,46):
+      see declaration of 'glm::vec<2,T,Q>::operator |='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(379,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator ^=(U)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(200,46):
+      see declaration of 'glm::vec<2,T,Q>::operator ^='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(388,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator ^=(const glm::vec<1,A,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(202,46):
+      see declaration of 'glm::vec<2,T,Q>::operator ^='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(397,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator ^=(const glm::vec<2,U,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(204,46):
+      see declaration of 'glm::vec<2,T,Q>::operator ^='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(406,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator <<=(U)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(206,46):
+      see declaration of 'glm::vec<2,T,Q>::operator <<='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(415,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator <<=(const glm::vec<1,A,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(208,46):
+      see declaration of 'glm::vec<2,T,Q>::operator <<='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(424,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator <<=(const glm::vec<2,U,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(210,46):
+      see declaration of 'glm::vec<2,T,Q>::operator <<='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(433,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator >>=(U)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(212,46):
+      see declaration of 'glm::vec<2,T,Q>::operator >>='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(442,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator >>=(const glm::vec<1,A,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(214,46):
+      see declaration of 'glm::vec<2,T,Q>::operator >>='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(451,64): error C2995: 'glm::vec<2,T,Q> &glm::vec<2,T,Q>::operator >>=(const glm::vec<2,U,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(216,46):
+      see declaration of 'glm::vec<2,T,Q>::operator >>='
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(461,48): error C2995: 'glm::vec<2,T,Q> glm::operator +(const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(222,43):
+      see declaration of 'glm::operator +'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(467,48): error C2995: 'glm::vec<2,T,Q> glm::operator -(const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(225,43):
+      see declaration of 'glm::operator -'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(477,48): error C2995: 'glm::vec<2,T,Q> glm::operator +(const glm::vec<2,T,Q> &,T)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(230,43):
+      see declaration of 'glm::operator +'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(485,48): error C2995: 'glm::vec<2,T,Q> glm::operator +(const glm::vec<2,T,Q> &,const glm::vec<1,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(233,43):
+      see declaration of 'glm::operator +'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(493,48): error C2995: 'glm::vec<2,T,Q> glm::operator +(T,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(236,43):
+      see declaration of 'glm::operator +'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(501,48): error C2995: 'glm::vec<2,T,Q> glm::operator +(const glm::vec<1,T,Q> &,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(239,43):
+      see declaration of 'glm::operator +'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(509,48): error C2995: 'glm::vec<2,T,Q> glm::operator +(const glm::vec<2,T,Q> &,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(242,43):
+      see declaration of 'glm::operator +'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(517,48): error C2995: 'glm::vec<2,T,Q> glm::operator -(const glm::vec<2,T,Q> &,T)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(245,43):
+      see declaration of 'glm::operator -'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(525,48): error C2995: 'glm::vec<2,T,Q> glm::operator -(const glm::vec<2,T,Q> &,const glm::vec<1,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(248,43):
+      see declaration of 'glm::operator -'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(533,48): error C2995: 'glm::vec<2,T,Q> glm::operator -(T,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(251,43):
+      see declaration of 'glm::operator -'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(541,48): error C2995: 'glm::vec<2,T,Q> glm::operator -(const glm::vec<1,T,Q> &,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(254,43):
+      see declaration of 'glm::operator -'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(549,48): error C2995: 'glm::vec<2,T,Q> glm::operator -(const glm::vec<2,T,Q> &,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(257,43):
+      see declaration of 'glm::operator -'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(557,48): error C2995: 'glm::vec<2,T,Q> glm::operator *(const glm::vec<2,T,Q> &,T)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(260,43):
+      see declaration of 'glm::operator *'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(565,48): error C2995: 'glm::vec<2,T,Q> glm::operator *(const glm::vec<2,T,Q> &,const glm::vec<1,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(263,43):
+      see declaration of 'glm::operator *'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(573,48): error C2995: 'glm::vec<2,T,Q> glm::operator *(T,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(266,43):
+      see declaration of 'glm::operator *'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(581,48): error C2995: 'glm::vec<2,T,Q> glm::operator *(const glm::vec<1,T,Q> &,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(269,43):
+      see declaration of 'glm::operator *'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(589,48): error C2995: 'glm::vec<2,T,Q> glm::operator *(const glm::vec<2,T,Q> &,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(272,43):
+      see declaration of 'glm::operator *'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(597,48): error C2995: 'glm::vec<2,T,Q> glm::operator /(const glm::vec<2,T,Q> &,T)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(275,43):
+      see declaration of 'glm::operator /'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(605,48): error C2995: 'glm::vec<2,T,Q> glm::operator /(const glm::vec<2,T,Q> &,const glm::vec<1,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(278,43):
+      see declaration of 'glm::operator /'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(613,48): error C2995: 'glm::vec<2,T,Q> glm::operator /(T,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(281,43):
+      see declaration of 'glm::operator /'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(621,48): error C2995: 'glm::vec<2,T,Q> glm::operator /(const glm::vec<1,T,Q> &,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(284,43):
+      see declaration of 'glm::operator /'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(629,48): error C2995: 'glm::vec<2,T,Q> glm::operator /(const glm::vec<2,T,Q> &,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(287,43):
+      see declaration of 'glm::operator /'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(639,48): error C2995: 'glm::vec<2,T,Q> glm::operator %(const glm::vec<2,T,Q> &,T)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(290,43):
+      see declaration of 'glm::operator %'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(647,48): error C2995: 'glm::vec<2,T,Q> glm::operator %(const glm::vec<2,T,Q> &,const glm::vec<1,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(293,43):
+      see declaration of 'glm::operator %'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(655,48): error C2995: 'glm::vec<2,T,Q> glm::operator %(T,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(296,43):
+      see declaration of 'glm::operator %'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(663,48): error C2995: 'glm::vec<2,T,Q> glm::operator %(const glm::vec<1,T,Q> &,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(299,43):
+      see declaration of 'glm::operator %'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(671,48): error C2995: 'glm::vec<2,T,Q> glm::operator %(const glm::vec<2,T,Q> &,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(302,43):
+      see declaration of 'glm::operator %'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(679,48): error C2995: 'glm::vec<2,T,Q> glm::operator &(const glm::vec<2,T,Q> &,T)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(305,43):
+      see declaration of 'glm::operator &'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(687,48): error C2995: 'glm::vec<2,T,Q> glm::operator &(const glm::vec<2,T,Q> &,const glm::vec<1,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(308,43):
+      see declaration of 'glm::operator &'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(695,48): error C2995: 'glm::vec<2,T,Q> glm::operator &(T,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(311,43):
+      see declaration of 'glm::operator &'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(703,48): error C2995: 'glm::vec<2,T,Q> glm::operator &(const glm::vec<1,T,Q> &,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(314,43):
+      see declaration of 'glm::operator &'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(711,48): error C2995: 'glm::vec<2,T,Q> glm::operator &(const glm::vec<2,T,Q> &,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(317,43):
+      see declaration of 'glm::operator &'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(719,48): error C2995: 'glm::vec<2,T,Q> glm::operator |(const glm::vec<2,T,Q> &,T)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(320,43):
+      see declaration of 'glm::operator |'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(727,48): error C2995: 'glm::vec<2,T,Q> glm::operator |(const glm::vec<2,T,Q> &,const glm::vec<1,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(323,43):
+      see declaration of 'glm::operator |'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(735,48): error C2995: 'glm::vec<2,T,Q> glm::operator |(T,const glm::vec<2,T,Q> &)': function template has already been defined
+  (compiling source file 'model.cpp')
+      C:\Users\colli\OneDrive\Documents\libraries\glm\detail\type_vec2.hpp(326,43):
+      see declaration of 'glm::operator |'
+  
+C:\Users\colli\source\repos\toyRenderer\External Libraries\glm\detail\type_vec2.inl(735,48): error C1003: error count exceeds 100; stopping compilation
+  (compiling source file 'model.cpp')
+  
+  stb_image.cpp
+  textRenderer.cpp
