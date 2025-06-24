@@ -16,6 +16,7 @@ C:\Users\colli\source\repos\toyRenderer\toyRenderer\main.cpp;C:\Users\colli\sour
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\mesh.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\mesh.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\model.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\model.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\modelDirectory\modelDirectory.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\modelDirectory.obj
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\objects\objects.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\objects.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\renderer\renderer.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\renderer.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\shader.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\shader.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\shaderDirectory\shaderDirectory.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\shaderDirectory.obj

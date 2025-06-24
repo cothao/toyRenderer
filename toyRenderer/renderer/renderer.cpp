@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "../objects/objects.h"
 
 namespace Renderer
 {
@@ -54,10 +55,12 @@ void Renderer::RenderScene()
 	ShaderDirectory::GetShader("modelShader").SetMat4("projection", projection);
 
 	// Draw the models in the model directory
-	for (auto modelKey = ModelDirectory::Directory.begin(); modelKey != ModelDirectory::Directory.end(); modelKey++)
-	{
-		DrawModel(modelKey->first, "modelShader");
-	}
+	//for (auto modelKey = ModelDirectory::Directory.begin(); modelKey != ModelDirectory::Directory.end(); modelKey++)
+	//{
+	//	DrawModel(modelKey->first, "modelShader");
+	//}
+
+	Object::Sphere();
 
 }
 
