@@ -54,6 +54,7 @@ int main()
         Renderer::SetModelMatrix(glm::mat4(1.));
         Renderer::SetViewMatrix(camera.View);
         Renderer::SetProjectionMatrix(glm::perspective(glm::radians(fov), 1600.f / 1000.f, 0.1f, 100.f));
+        Renderer::SetCameraPosition(camera.CameraPos);
 
         Renderer::RenderScene();
 

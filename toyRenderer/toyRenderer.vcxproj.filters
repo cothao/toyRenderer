@@ -174,5 +174,7 @@
     <None Include="shaders\model.vert" />
     <None Include="shaders\model.frag" />
     <None Include="imgui.ini" />
+    <None Include="shaders\sphere_pbr.frag" />
+    <None Include="shaders\sphere_pbr.vert" />
   </ItemGroup>
 </Project>

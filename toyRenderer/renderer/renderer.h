@@ -12,12 +12,14 @@ namespace Renderer
 	extern glm::mat4 model;
 	extern glm::mat4 view;
 	extern glm::mat4 projection;
+	extern glm::vec3 cameraPos;
 
 	// Initializes models, shaders, buffers, matrices, etc.
 	void Init();
 	void SetModelMatrix(glm::mat4 model);
 	void SetViewMatrix(glm::mat4 view);
 	void SetProjectionMatrix(glm::mat4 projection);
+	void SetCameraPosition(glm::vec3 cameraPos);
 	void ClearBuffers();
 	void ClearColor(glm::vec4 color);
 	void RenderScene();
@@ -30,6 +32,7 @@ namespace Renderer
 	glm::mat4 GetModelMatrix();
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetProjectionMatrix();
+	glm::vec3 GetCameraPosition();
 
 
 

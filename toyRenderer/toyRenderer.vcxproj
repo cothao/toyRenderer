@@ -200,6 +200,8 @@
     <None Include="imgui.ini" />
     <None Include="shaders\model.frag" />
     <None Include="shaders\model.vert" />
+    <None Include="shaders\sphere_pbr.frag" />
+    <None Include="shaders\sphere_pbr.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
