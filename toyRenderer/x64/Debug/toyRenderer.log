@@ -1,5 +1,7 @@
-﻿  renderer.cpp
+﻿  main.cpp
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\input\input.h(17,3): warning C4091: 'extern ': ignored on left of 'Input::InputTypes' when no variable is declared
-  (compiling source file 'renderer/renderer.cpp')
+  (compiling source file 'main.cpp')
   
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\main.cpp(42,17): warning C4551: function call missing argument list
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\main.cpp(47,28): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   toyRenderer.vcxproj -> C:\Users\colli\source\repos\toyRenderer\x64\Debug\toyRenderer.exe

@@ -97,6 +97,18 @@ void Renderer::RenderScene()
 	ShaderDirectory::GetShader("sphereShader").SetMat4("view", view);
 	ShaderDirectory::GetShader("sphereShader").SetMat4("projection", projection);
 	ShaderDirectory::GetShader("sphereShader").SetVec3("camPos", cameraPos);
+	Object::Sphere();
+
+	glm::mat4 model = glm::mat4(1.);
+	model = glm::translate(model, glm::vec3(1., 1., -7));
+
+	SetModelMatrix(model);
+	ShaderDirectory::GetShader("lightShader").Use();
+	ShaderDirectory::GetShader("lightShader").SetMat4("model", model);
+	ShaderDirectory::GetShader("lightShader").SetMat4("view", view);
+	ShaderDirectory::GetShader("lightShader").SetMat4("projection", projection);
+	Object::Sphere();
+
 
 	// Draw the models in the model directory
 	//for (auto modelKey = ModelDirectory::Directory.begin(); modelKey != ModelDirectory::Directory.end(); modelKey++)
@@ -104,7 +116,6 @@ void Renderer::RenderScene()
 	//	DrawModel(modelKey->first, "modelShader");
 	//}
 
-	Object::Sphere();
 
 }
 
@@ -114,6 +125,7 @@ void Renderer::InitShaders()
 
 	ShaderDirectory::SetShader("modelShader", Shader("./shaders/model.vert", "./shaders/model.frag", nullptr));
 	ShaderDirectory::SetShader("sphereShader", Shader("./shaders/sphere_pbr.vert", "./shaders/sphere_pbr.frag", nullptr));
+	ShaderDirectory::SetShader("lightShader", Shader("./shaders/sphere_pbr.vert", "./shaders/light.frag", nullptr));
 
 }
 

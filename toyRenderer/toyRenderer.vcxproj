@@ -198,6 +198,7 @@
     <None Include="assimp-vc140-mt.dll" />
     <None Include="freetype.dll" />
     <None Include="imgui.ini" />
+    <None Include="shaders\light.frag" />
     <None Include="shaders\model.frag" />
     <None Include="shaders\model.vert" />
     <None Include="shaders\sphere_pbr.frag" />
