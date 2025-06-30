@@ -13,6 +13,11 @@ namespace Renderer
 	extern glm::mat4 view;
 	extern glm::mat4 projection;
 	extern glm::vec3 cameraPos;
+	extern int nrRows;
+	extern int nrColumns;
+	extern float spacing;
+	extern glm::vec3 lightPositions[];
+	extern glm::vec3 lightColors[];
 
 	// Initializes models, shaders, buffers, matrices, etc.
 	void Init();

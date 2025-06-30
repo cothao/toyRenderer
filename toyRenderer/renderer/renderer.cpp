@@ -9,6 +9,22 @@ namespace Renderer
 	extern glm::mat4 projection = glm::mat4(1.);
 	extern glm::vec3 cameraPos = glm::vec3(1.);
 	extern glm::mat4 MVP = glm::mat4(1.);
+	extern int nrRows = 7;
+	extern int nrColumns = 7;
+	extern float spacing = 2.5;
+	extern glm::vec3 lightPositions[] = {
+	glm::vec3(-10.0f,  10.0f, 10.0f),
+	glm::vec3(10.0f,  10.0f, 10.0f),
+	glm::vec3(-10.0f, -10.0f, 10.0f),
+	glm::vec3(10.0f, -10.0f, 10.0f),
+	};
+
+	extern glm::vec3 lightColors[] = {
+		glm::vec3(300.0f, 300.0f, 300.0f),
+		glm::vec3(300.0f, 300.0f, 300.0f),
+		glm::vec3(300.0f, 300.0f, 300.0f),
+		glm::vec3(300.0f, 300.0f, 300.0f)
+	};
 }
 
 void Renderer::Init()
@@ -52,6 +68,13 @@ void Renderer::Init()
 
 	InitShaders();
 	InitModels();
+
+	ShaderDirectory::GetShader("sphereShader").Use();
+	ShaderDirectory::GetShader("sphereShader").SetMat4("view", view);
+	ShaderDirectory::GetShader("sphereShader").SetMat4("projection", projection);
+	ShaderDirectory::GetShader("sphereShader").SetFloat("ao", 1.f);
+	ShaderDirectory::GetShader("sphereShader").SetVec3("albedo", glm::vec3(0.5, 0., 0.f));
+
 };
 
 void Renderer::SetModelMatrix(glm::mat4 model)
@@ -89,25 +112,53 @@ void Renderer::ClearColor(glm::vec4 color)
 void Renderer::RenderScene()
 {
 
-	ClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+	ClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.f));
 	ClearBuffers();
 
 	ShaderDirectory::GetShader("sphereShader").Use();
-	ShaderDirectory::GetShader("sphereShader").SetMat4("model", model);
+	ShaderDirectory::GetShader("sphereShader").SetVec3("camPos", Renderer::GetCameraPosition());
+
+	for (int i = 0; i < 4; i++)
+	{
+	ShaderDirectory::GetShader("sphereShader").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
+	ShaderDirectory::GetShader("sphereShader").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
+
+	}
+
 	ShaderDirectory::GetShader("sphereShader").SetMat4("view", view);
-	ShaderDirectory::GetShader("sphereShader").SetMat4("projection", projection);
-	ShaderDirectory::GetShader("sphereShader").SetVec3("camPos", cameraPos);
-	Object::Sphere();
 
-	glm::mat4 model = glm::mat4(1.);
-	model = glm::translate(model, glm::vec3(1., 1., -7));
+	// render rows*column number of spheres with varying metallic/roughness values scaled by rows and columns respectively
+	for (int row = 0; row < nrRows; ++row)
+	{
 
-	SetModelMatrix(model);
-	ShaderDirectory::GetShader("lightShader").Use();
-	ShaderDirectory::GetShader("lightShader").SetMat4("model", model);
-	ShaderDirectory::GetShader("lightShader").SetMat4("view", view);
-	ShaderDirectory::GetShader("lightShader").SetMat4("projection", projection);
-	Object::Sphere();
+		ShaderDirectory::GetShader("sphereShader").SetFloat("metallic", (float)row / (float)nrRows);
+
+		for (int col = 0; col < nrColumns; ++col)
+		{
+			// we clamp the roughness to 0.05 - 1.0 as perfectly smooth surfaces (roughness of 0.0) tend to look a bit off
+			// on direct lighting.
+			ShaderDirectory::GetShader("sphereShader").SetFloat("roughness", glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f));
+
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, glm::vec3(
+				(col - (nrColumns / 2)) * spacing,
+				(row - (nrRows / 2)) * spacing,
+				0.0f
+			));
+			ShaderDirectory::GetShader("sphereShader").SetMat4("model", model);
+			Object::Sphere();
+		}
+	}
+
+	//glm::mat4 model = glm::mat4(1.);
+	//model = glm::translate(model, glm::vec3(0., 1., 3.));
+
+	//SetModelMatrix(model);
+	//ShaderDirectory::GetShader("lightShader").Use();
+	//ShaderDirectory::GetShader("lightShader").SetMat4("model", model);
+	//ShaderDirectory::GetShader("lightShader").SetMat4("view", view);
+	//ShaderDirectory::GetShader("lightShader").SetMat4("projection", projection);
+	//Object::Sphere();
 
 
 	// Draw the models in the model directory

@@ -1,4 +1,4 @@
-#include "./api/api.h"
+﻿#include "./api/api.h"
 #include "camera.h"
 #include <iostream>
 
@@ -38,6 +38,7 @@ void Camera::MoveCamera(double XPos, double YPos)
 	Direction.z = glm::sin(glm::radians(Yaw)) * glm::cos(glm::radians(Pitch));
 
 	CameraFront = glm::normalize(Direction);
+
 }
 
 void Camera::CameraInput(GLFWwindow* Window, int keys[1024])

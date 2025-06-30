@@ -1,9 +1,14 @@
 #include "objects.h"
 
+namespace Object
+{
+    extern unsigned int sphereVAO = 0;
+    extern unsigned int indexCount = 0;
+}
+
 void Object::Sphere()
 {
-    unsigned int sphereVAO = 0;
-    unsigned int indexCount;
+
     if (sphereVAO == 0)
     {
         glGenVertexArrays(1, &sphereVAO);

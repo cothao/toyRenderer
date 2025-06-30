@@ -20,18 +20,19 @@ float PBR(vec3 lightEmission, float BRDF, vec3 lightColor, float cosTheta);
 
 float BRDF(float GGX, float Smith, float Schlick);
 
-vec3 F0 = vec3(0.3);
+vec3 F0 = vec3(0.4);
 
 vec3 bReflectivity = vec3(0.4);
 
-vec3 lightPosition = vec3(1., 1., -7.);
+uniform vec3 lightPosition[4];
 
-vec3 lightColor = vec3(1.);
+uniform vec3 lightColor[4];
 
-vec3 albedo = vec3(.5, 0., 0.);
+uniform vec3 albedo;
 
-float roughness = 0.5;
-
+uniform float roughness;
+uniform float metallic;
+uniform float ao;
 uniform vec3 camPos;
 
 void main()
@@ -39,40 +40,46 @@ void main()
 	
 	vec3 N = normalize(Normal);
 	vec3 V = normalize(camPos - FragPos);
-	vec3 L = normalize(lightPosition - FragPos);
-	vec3 H = normalize(V + L);
-	float distance = length(lightPosition - FragPos);
-	float attenuation = 1. / (distance * distance);
-	vec3 radiance = lightColor * attenuation;
-
-	F0 = mix(F0, albedo, 0.4);
-
-	vec3 Le = vec3(0.);
-
+	
 	vec3 Lo = vec3(0.);
-
 	vec3 fLambert = albedo/PI;
+	
+	for (int i = 0; i < 4; i++)
+	{
+		vec3 L = normalize(lightPosition[i] - FragPos);
+		vec3 H = normalize(V + L);
+		float distance = length(lightPosition[i] - FragPos);
+		float attenuation = 1. / (distance * distance);
+		vec3 radiance = lightColor[i] * attenuation;
 
-	float D = GGX(N, H, roughness);
+		F0 = mix(F0, albedo, metallic);
 
-	float G = Smith(L, N, V, roughness);
 
-	vec3 F = Schlick(V, H, F0);
+		float D = GGX(N, H, roughness);
 
-	vec3 ks = F;
-	vec3 kd = vec3(1.) - ks;
+		float G = Smith(L, N, V, roughness);
 
-	vec3 num = D * G * F;
-	float denom = 4 * max(dot(N ,V), 0.0)*max(dot(N, L), 0.) + 0.00001;
+		vec3 F = Schlick(V, H, F0);
 
-	vec3 diff = kd * fLambert;
-	vec3 spec = num/denom;
+		vec3 ks = F;
+		vec3 kd = vec3(1.) - ks;
+		kd *= 1.0 - metallic; 
 
-	vec3 brdf = diff + spec;
+		vec3 num = D * G * F;
+		float denom = 4 * (max(dot(N ,V), 0.0)*max(dot(N, L), 0.) + 0.0001);
 
-	Lo += (brdf * radiance * max(dot(N, L), 0.000));
+		vec3 diff = kd * fLambert;
+		vec3 spec = num/denom;
 
-	vec3 ambient = vec3(0.03) * albedo * 1.;
+		vec3 brdf = diff + spec;
+
+		float nDotL = max(dot(N, L), 0.0);
+
+		Lo += (kd * albedo/PI + spec) * radiance * nDotL;
+	
+	};
+
+	vec3 ambient = vec3(0.03) * albedo * ao;
     vec3 color = ambient + Lo;
 	
     color = color / (color + vec3(1.0));
@@ -81,6 +88,15 @@ void main()
 	FragColor = vec4(color, 1.);
 
 }
+
+vec3 Schlick(vec3 V, vec3 H, vec3 F0)
+{
+
+	float cosTheta = max(dot(H,V), 0.00);
+
+	return F0 + (1 - F0) * pow(clamp(1- cosTheta, 0., 1.), 5.);
+
+};
 
 float GGX(vec3 N, vec3 H, float a)
 {
@@ -95,13 +111,6 @@ float GGX(vec3 N, vec3 H, float a)
 
 };
 
-float Smith(vec3 L, vec3 N, vec3 V, float a)
-{
-
-	return G1(N, L, a) * G1(N, V, a);
-
-}
-;
 
 float G1(vec3 N, vec3 X, float a)
 {
@@ -117,12 +126,10 @@ float G1(vec3 N, vec3 X, float a)
 
 }
 
-vec3 Schlick(vec3 V, vec3 H, vec3 F0)
+float Smith(vec3 L, vec3 N, vec3 V, float a)
 {
 
-	float cosTheta = max(dot(V,H), 0.00);
+	return G1(N, L, a) * G1(N, V, a);
 
-	return F0 + (1 - F0) * pow(clamp(1- cosTheta, 0., 1.), 5.);
-
-};
-
+}
+;

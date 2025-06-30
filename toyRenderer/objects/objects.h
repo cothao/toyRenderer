@@ -8,6 +8,9 @@
 namespace Object
 {
 
+	extern unsigned int sphereVAO;
+	extern unsigned int indexCount;
+
 	void Sphere();
 
 }
