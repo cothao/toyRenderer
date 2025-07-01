@@ -7,17 +7,11 @@ in vec2 TexCoords;
 in vec3 FragPos;
 
 uniform vec3 lightPosition[4];
-
 uniform vec3 lightColor[4];
+uniform vec3 albedo;
 
-uniform sampler2D base_map;
-uniform sampler2D metallic_map;
-uniform sampler2D normal_map;
-uniform sampler2D roughness_map;
-//uniform sampler2D texture_ao;
-
-//uniform float roughness;
-//uniform float metallic;
+uniform float roughness;
+uniform float metallic;
 uniform float ao;
 uniform vec3 camPos;
 
@@ -35,8 +29,6 @@ float PBR(vec3 lightEmission, float BRDF, vec3 lightColor, float cosTheta);
 
 float BRDF(float GGX, float Smith, float Schlick);
 
-vec3 getNormalFromMap();
-
 vec3 F0 = vec3(0.4);
 
 vec3 bReflectivity = vec3(0.4);
@@ -44,12 +36,7 @@ vec3 bReflectivity = vec3(0.4);
 void main()
 {
 	
-	vec3 albedo = vec3(texture(base_map, TexCoords));
-	float metallic = texture(metallic_map, TexCoords).r;
-	float roughness = texture(roughness_map, TexCoords).r;
-//	float metallic = texture(texture_metallic, TexCoords).r;
-	
-	vec3 N = getNormalFromMap();
+	vec3 N = normalize(Normal);
 	vec3 V = normalize(camPos - FragPos);
 	
 	vec3 Lo = vec3(0.);
@@ -144,20 +131,3 @@ float Smith(vec3 L, vec3 N, vec3 V, float a)
 
 }
 ;
-
-vec3 getNormalFromMap()
-{
-    vec3 tangentNormal = texture(normal_map, TexCoords).xyz * 2.0 - 1.0;
-
-    vec3 Q1  = dFdx(FragPos);
-    vec3 Q2  = dFdy(FragPos);
-    vec2 st1 = dFdx(TexCoords);
-    vec2 st2 = dFdy(TexCoords);
-
-    vec3 N   = normalize(Normal);
-    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
-    vec3 B  = -normalize(cross(N, T));
-    mat3 TBN = mat3(T, B, N);
-
-    return normalize(TBN * tangentNormal);
-}

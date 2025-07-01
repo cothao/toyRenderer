@@ -4,6 +4,7 @@
 #include "glad/glad.h"
 #include "../shaderDirectory/shaderDirectory.h"
 #include "../modelDirectory/modelDirectory.h"
+#include "../textureDirectory/textureDirectory.h"
 #include "../camera.h"
 
 namespace Renderer
@@ -18,6 +19,8 @@ namespace Renderer
 	extern float spacing;
 	extern glm::vec3 lightPositions[];
 	extern glm::vec3 lightColors[];
+	extern float roughness;
+	extern float metallic;
 
 	// Initializes models, shaders, buffers, matrices, etc.
 	void Init();

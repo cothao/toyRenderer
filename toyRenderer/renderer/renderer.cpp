@@ -12,6 +12,9 @@ namespace Renderer
 	extern int nrRows = 7;
 	extern int nrColumns = 7;
 	extern float spacing = 2.5;
+	extern float metallic = .5f;
+	extern float roughness = .5f;
+
 	extern glm::vec3 lightPositions[] = {
 	glm::vec3(-10.0f,  10.0f, 10.0f),
 	glm::vec3(10.0f,  10.0f, 10.0f),
@@ -66,14 +69,34 @@ void Renderer::Init()
 		std::cout << "Failed to load HDR Image\n";
 	}
 
+     /*
+      *  _    ___   _   ___      _____ _____  _______ _   _ ___ ___ ___ 
+      * | |  / _ \ /_\ |   \    |_   _| __\ \/ /_   _| | | | _ \ __/ __|
+      * | |_| (_) / _ \| |) |     | | | _| >  <  | | | |_| |   / _|\__ \
+      * |____\___/_/ \_\___/      |_| |___/_/\_\ |_|  \___/|_|_\___|___/
+      *                                                                 
+      */
+
+	TextureDirectory::SetTexture("rusted_metal_base_map", "../images/rusted_metal/rustediron2_basecolor.png", true);
+	TextureDirectory::SetTexture("rusted_metal_metallic_map", "../images/rusted_metal/rustediron2_metallic.png", true);
+	TextureDirectory::SetTexture("rusted_metal_normal_map", "../images/rusted_metal/rustediron2_normal.png", true);
+	TextureDirectory::SetTexture("rusted_metal_roughness_map", "../images/rusted_metal/rustediron2_roughness.png", true);
+
 	InitShaders();
 	InitModels();
+
+	ShaderDirectory::GetShader("pbrNoMap").Use();
+	ShaderDirectory::GetShader("pbrNoMap").SetMat4("view", view);
+	ShaderDirectory::GetShader("pbrNoMap").SetMat4("projection", projection);
 
 	ShaderDirectory::GetShader("sphereShader").Use();
 	ShaderDirectory::GetShader("sphereShader").SetMat4("view", view);
 	ShaderDirectory::GetShader("sphereShader").SetMat4("projection", projection);
 	ShaderDirectory::GetShader("sphereShader").SetFloat("ao", 1.f);
-	ShaderDirectory::GetShader("sphereShader").SetVec3("albedo", glm::vec3(0.5, 0., 0.f));
+	ShaderDirectory::GetShader("sphereShader").SetInt("base_map", 0);
+	ShaderDirectory::GetShader("sphereShader").SetInt("metallic_map", 1);
+	ShaderDirectory::GetShader("sphereShader").SetInt("normal_map", 2);
+	ShaderDirectory::GetShader("sphereShader").SetInt("roughness_map", 3);
 
 };
 
@@ -116,50 +139,80 @@ void Renderer::RenderScene()
 	ClearBuffers();
 
 	ShaderDirectory::GetShader("sphereShader").Use();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("rusted_metal_base_map"));
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("rusted_metal_metallic_map"));
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("rusted_metal_normal_map"));
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("rusted_metal_roughness_map"));
+
 	ShaderDirectory::GetShader("sphereShader").SetVec3("camPos", Renderer::GetCameraPosition());
 
 	for (int i = 0; i < 4; i++)
 	{
-	ShaderDirectory::GetShader("sphereShader").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
-	ShaderDirectory::GetShader("sphereShader").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
+
+		ShaderDirectory::GetShader("sphereShader").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
+		ShaderDirectory::GetShader("sphereShader").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
 
 	}
 
 	ShaderDirectory::GetShader("sphereShader").SetMat4("view", view);
 
-	// render rows*column number of spheres with varying metallic/roughness values scaled by rows and columns respectively
-	for (int row = 0; row < nrRows; ++row)
+	ShaderDirectory::GetShader("sphereShader").SetMat4("model", model);
+	//ShaderDirectory::GetShader("sphereShader").SetFloat("roughness", glm::clamp(roughness, 0.05f, 1.0f));
+	//ShaderDirectory::GetShader("sphereShader").SetFloat("metallic", metallic);
+
+	Object::Sphere();
+
+	for (int i = 0; i < 4; i++)
 	{
+	
+		glm::mat4 model = glm::mat4(1.);
+		model = glm::translate(model, lightPositions[i]);
 
-		ShaderDirectory::GetShader("sphereShader").SetFloat("metallic", (float)row / (float)nrRows);
-
-		for (int col = 0; col < nrColumns; ++col)
-		{
-			// we clamp the roughness to 0.05 - 1.0 as perfectly smooth surfaces (roughness of 0.0) tend to look a bit off
-			// on direct lighting.
-			ShaderDirectory::GetShader("sphereShader").SetFloat("roughness", glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f));
-
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(
-				(col - (nrColumns / 2)) * spacing,
-				(row - (nrRows / 2)) * spacing,
-				0.0f
-			));
-			ShaderDirectory::GetShader("sphereShader").SetMat4("model", model);
-			Object::Sphere();
-		}
+		SetModelMatrix(model);
+		ShaderDirectory::GetShader("lightShader").Use();
+		ShaderDirectory::GetShader("lightShader").SetMat4("model", model);
+		ShaderDirectory::GetShader("lightShader").SetMat4("view", view);
+		ShaderDirectory::GetShader("lightShader").SetMat4("projection", projection);
+		Object::Sphere();
+	
 	}
 
-	//glm::mat4 model = glm::mat4(1.);
-	//model = glm::translate(model, glm::vec3(0., 1., 3.));
+	ShaderDirectory::GetShader("pbrNoMap").Use();
 
-	//SetModelMatrix(model);
-	//ShaderDirectory::GetShader("lightShader").Use();
-	//ShaderDirectory::GetShader("lightShader").SetMat4("model", model);
-	//ShaderDirectory::GetShader("lightShader").SetMat4("view", view);
-	//ShaderDirectory::GetShader("lightShader").SetMat4("projection", projection);
-	//Object::Sphere();
+	glm::mat4 stageModel = glm::mat4(1.);
 
+	stageModel = glm::translate(stageModel, glm::vec3(4., 0., 0.));
+
+	SetModelMatrix(stageModel);
+
+	ShaderDirectory::GetShader("pbrNoMap").SetVec3("camPos", Renderer::GetCameraPosition());
+	ShaderDirectory::GetShader("pbrNoMap").SetVec3("albedo", glm::vec3(1., 0., 0.));
+
+	for (int i = 0; i < 4; i++)
+	{
+
+		ShaderDirectory::GetShader("pbrNoMap").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
+		ShaderDirectory::GetShader("pbrNoMap").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
+
+	}
+
+	ShaderDirectory::GetShader("pbrNoMap").SetMat4("view", view);
+
+	ShaderDirectory::GetShader("pbrNoMap").SetMat4("model", model);
+
+	ShaderDirectory::GetShader("pbrNoMap").SetFloat("metallic", 0.5);
+	ShaderDirectory::GetShader("pbrNoMap").SetFloat("roughness", 0.5);
+	ShaderDirectory::GetShader("pbrNoMap").SetFloat("ao", 1.);
+
+	Object::Sphere();
 
 	// Draw the models in the model directory
 	//for (auto modelKey = ModelDirectory::Directory.begin(); modelKey != ModelDirectory::Directory.end(); modelKey++)
@@ -177,6 +230,7 @@ void Renderer::InitShaders()
 	ShaderDirectory::SetShader("modelShader", Shader("./shaders/model.vert", "./shaders/model.frag", nullptr));
 	ShaderDirectory::SetShader("sphereShader", Shader("./shaders/sphere_pbr.vert", "./shaders/sphere_pbr.frag", nullptr));
 	ShaderDirectory::SetShader("lightShader", Shader("./shaders/sphere_pbr.vert", "./shaders/light.frag", nullptr));
+	ShaderDirectory::SetShader("pbrNoMap", Shader("./shaders/pbr_no_map.vert", "./shaders/pbr_no_map.frag", nullptr));
 
 }
 

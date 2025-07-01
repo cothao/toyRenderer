@@ -90,6 +90,15 @@
     <ClCompile Include="objects\objects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="textureDirectory\texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="texture\texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="textureDirectory\textureDirectory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assimpglmhelpers.h">
@@ -165,6 +174,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="objects\objects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="textureDirectory\texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="texture\texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="textureDirectory\textureDirectory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

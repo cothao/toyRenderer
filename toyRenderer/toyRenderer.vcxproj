@@ -165,6 +165,7 @@
     <ClCompile Include="shaderDirectory\shaderDirectory.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="textRenderer.cpp" />
+    <ClCompile Include="textureDirectory\textureDirectory.cpp" />
     <ClCompile Include="tinyfiledialogs.c" />
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +193,7 @@
     <ClInclude Include="shaderDirectory\shaderDirectory.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="textRenderer.h" />
+    <ClInclude Include="textureDirectory\textureDirectory.h" />
     <ClInclude Include="tinyfiledialogs.h" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +203,8 @@
     <None Include="shaders\light.frag" />
     <None Include="shaders\model.frag" />
     <None Include="shaders\model.vert" />
+    <None Include="shaders\pbr_no_map.frag" />
+    <None Include="shaders\pbr_no_map.vert" />
     <None Include="shaders\sphere_pbr.frag" />
     <None Include="shaders\sphere_pbr.vert" />
   </ItemGroup>
