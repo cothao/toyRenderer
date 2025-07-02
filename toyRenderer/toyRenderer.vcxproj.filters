@@ -90,13 +90,10 @@
     <ClCompile Include="objects\objects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="textureDirectory\texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="texture\texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="textureDirectory\textureDirectory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="framebufferDirectory\framebufferDirectory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -176,13 +173,10 @@
     <ClInclude Include="objects\objects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="textureDirectory\texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="texture\texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="textureDirectory\textureDirectory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="framebufferDirectory\framebufferDirectory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -195,5 +189,11 @@
     <None Include="shaders\sphere_pbr.frag" />
     <None Include="shaders\sphere_pbr.vert" />
     <None Include="shaders\light.frag" />
+    <None Include="shaders\pbr_no_map.frag" />
+    <None Include="shaders\pbr_no_map.vert" />
+    <None Include="shaders\equirectangular.frag" />
+    <None Include="shaders\equirectangular.vert" />
+    <None Include="shaders\cubemap.frag" />
+    <None Include="shaders\cubemap.vert" />
   </ItemGroup>
 </Project>

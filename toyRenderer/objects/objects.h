@@ -9,9 +9,12 @@ namespace Object
 {
 
 	extern unsigned int sphereVAO;
+	extern unsigned int cubeVAO;
+	extern unsigned int cubeVBO;
 	extern unsigned int indexCount;
 
 	void Sphere();
+	void Cube();
 
 }
 

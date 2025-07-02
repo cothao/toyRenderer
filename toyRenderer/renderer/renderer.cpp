@@ -14,6 +14,9 @@ namespace Renderer
 	extern float spacing = 2.5;
 	extern float metallic = .5f;
 	extern float roughness = .5f;
+	extern unsigned int captureFBO = 0;
+	extern unsigned int captureRBO = 0;
+	extern unsigned int envCubemap = 0;
 
 	extern glm::vec3 lightPositions[] = {
 	glm::vec3(-10.0f,  10.0f, 10.0f),
@@ -34,7 +37,7 @@ void Renderer::Init()
 {
 
 	glEnable(GL_DEPTH_TEST);
-
+	glDepthFunc(GL_LEQUAL);
      /*
       *  _  _ ___  ___     _____ _____  _______ _   _ ___ ___ 
       * | || |   \| _ \   |_   _| __\ \/ /_   _| | | | _ \ __|
@@ -42,32 +45,6 @@ void Renderer::Init()
       * |_||_|___/|_|_\     |_| |___/_/\_\ |_|  \___/|_|_\___|
       *                                                       
       */
-
-	int width, height, nrComponents;
-
-	float* data = stbi_loadf("../images/photo_studio_loft_hall_4k.hdr", &width, &height, &nrComponents, 0);
-
-	unsigned int hdrTexture;
-
-	if (data)
-	{
-
-		glGenTextures(1, &hdrTexture);
-		glBindTexture(GL_TEXTURE_2D, hdrTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGB, GL_FLOAT, data);
-		
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-
-	}
-	else
-	{
-		std::cout << "Failed to load HDR Image\n";
-	}
 
      /*
       *  _    ___   _   ___      _____ _____  _______ _   _ ___ ___ ___ 
@@ -81,6 +58,8 @@ void Renderer::Init()
 	TextureDirectory::SetTexture("rusted_metal_metallic_map", "../images/rusted_metal/rustediron2_metallic.png", true);
 	TextureDirectory::SetTexture("rusted_metal_normal_map", "../images/rusted_metal/rustediron2_normal.png", true);
 	TextureDirectory::SetTexture("rusted_metal_roughness_map", "../images/rusted_metal/rustediron2_roughness.png", true);
+	
+	TextureDirectory::SetHDRTexture("photo_studio", "../images/photo_studio_loft_hall_4k.hdr");
 
 	InitShaders();
 	InitModels();
@@ -97,6 +76,67 @@ void Renderer::Init()
 	ShaderDirectory::GetShader("sphereShader").SetInt("metallic_map", 1);
 	ShaderDirectory::GetShader("sphereShader").SetInt("normal_map", 2);
 	ShaderDirectory::GetShader("sphereShader").SetInt("roughness_map", 3);
+
+	ShaderDirectory::GetShader("equirectangular").Use();
+	ShaderDirectory::GetShader("equirectangular").SetInt("equirectangularMap", 0);
+	ShaderDirectory::GetShader("equirectangular").SetMat4("projection", projection);
+	ShaderDirectory::GetShader("equirectangular").SetMat4("view", view);
+
+	glGenFramebuffers(1, &captureFBO);
+	glGenRenderbuffers(1, &captureRBO);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
+
+	glGenTextures(1, &envCubemap);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+	for (unsigned int i = 0; i < 6; ++i)
+	{
+		// note that we store each face with 16 bit floating point values
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F,
+			512, 512, 0, GL_RGB, GL_FLOAT, nullptr);
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+	glm::mat4 captureViews[] =
+	{
+	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
+	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+	};
+
+	// convert HDR equirectangular environment map to cubemap equivalent
+	ShaderDirectory::GetShader("equirectangular").Use();
+	ShaderDirectory::GetShader("equirectangular").SetInt("equirectangularMap", 0);
+	ShaderDirectory::GetShader("equirectangular").SetMat4("projection", captureProjection);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("photo_studio"));
+
+	glViewport(0, 0, 512, 512); // don't forget to configure the viewport to the capture dimensions.
+	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+	for (unsigned int i = 0; i < 6; ++i)
+	{
+		ShaderDirectory::GetShader("equirectangular").SetMat4("view", captureViews[i]);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envCubemap, 0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		Object::Cube(); // renders a 1x1 cube
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	ShaderDirectory::GetShader("cubemap").Use();
+	ShaderDirectory::GetShader("cubemap").SetMat4("projection", projection);
 
 };
 
@@ -165,8 +205,6 @@ void Renderer::RenderScene()
 	ShaderDirectory::GetShader("sphereShader").SetMat4("view", view);
 
 	ShaderDirectory::GetShader("sphereShader").SetMat4("model", model);
-	//ShaderDirectory::GetShader("sphereShader").SetFloat("roughness", glm::clamp(roughness, 0.05f, 1.0f));
-	//ShaderDirectory::GetShader("sphereShader").SetFloat("metallic", metallic);
 
 	Object::Sphere();
 
@@ -214,6 +252,26 @@ void Renderer::RenderScene()
 
 	Object::Sphere();
 
+	//ShaderDirectory::GetShader("equirectangular").Use();
+	//ShaderDirectory::GetShader("equirectangular").SetMat4("view", view);
+
+	//glActiveTexture(GL_TEXTURE0);
+
+	//glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("photo_studio"));
+
+	//Object::Cube();
+
+	ShaderDirectory::GetShader("cubemap").Use();
+	ShaderDirectory::GetShader("cubemap").SetMat4("view", view);
+
+	ShaderDirectory::GetShader("cubemap").SetInt("environmentMap", 0);
+
+	glActiveTexture(GL_TEXTURE0);
+
+	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("photo_studio"));
+
+	Object::Cube();
+
 	// Draw the models in the model directory
 	//for (auto modelKey = ModelDirectory::Directory.begin(); modelKey != ModelDirectory::Directory.end(); modelKey++)
 	//{
@@ -231,6 +289,8 @@ void Renderer::InitShaders()
 	ShaderDirectory::SetShader("sphereShader", Shader("./shaders/sphere_pbr.vert", "./shaders/sphere_pbr.frag", nullptr));
 	ShaderDirectory::SetShader("lightShader", Shader("./shaders/sphere_pbr.vert", "./shaders/light.frag", nullptr));
 	ShaderDirectory::SetShader("pbrNoMap", Shader("./shaders/pbr_no_map.vert", "./shaders/pbr_no_map.frag", nullptr));
+	ShaderDirectory::SetShader("equirectangular", Shader("./shaders/equirectangular.vert", "./shaders/equirectangular.frag", nullptr));
+	ShaderDirectory::SetShader("cubemap", Shader("./shaders/cubemap.vert", "./shaders/cubemap.frag", nullptr));
 
 }
 

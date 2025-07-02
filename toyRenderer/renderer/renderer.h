@@ -21,6 +21,9 @@ namespace Renderer
 	extern glm::vec3 lightColors[];
 	extern float roughness;
 	extern float metallic;
+	extern unsigned int captureFBO;
+	extern unsigned int captureRBO;
+	extern unsigned int envCubemap;
 
 	// Initializes models, shaders, buffers, matrices, etc.
 	void Init();

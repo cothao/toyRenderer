@@ -146,6 +146,7 @@
     <ClCompile Include="editor\editor.cpp" />
     <ClCompile Include="example.cpp" />
     <ClCompile Include="fileDialog\fileDialog.cpp" />
+    <ClCompile Include="framebufferDirectory\framebufferDirectory.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="input\input.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="editor\editor.h" />
     <ClInclude Include="fileDialog\fileDialog.h" />
+    <ClInclude Include="framebufferDirectory\framebufferDirectory.h" />
     <ClInclude Include="input\input.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -200,6 +202,10 @@
     <None Include="assimp-vc140-mt.dll" />
     <None Include="freetype.dll" />
     <None Include="imgui.ini" />
+    <None Include="shaders\cubemap.frag" />
+    <None Include="shaders\cubemap.vert" />
+    <None Include="shaders\equirectangular.frag" />
+    <None Include="shaders\equirectangular.vert" />
     <None Include="shaders\light.frag" />
     <None Include="shaders\model.frag" />
     <None Include="shaders\model.vert" />
