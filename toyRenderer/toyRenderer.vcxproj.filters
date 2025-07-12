@@ -195,5 +195,9 @@
     <None Include="shaders\equirectangular.vert" />
     <None Include="shaders\cubemap.frag" />
     <None Include="shaders\cubemap.vert" />
+    <None Include="shaders\convolutionShader.frag" />
+    <None Include="shaders\prefilter.frag" />
+    <None Include="shaders\brdf.frag" />
+    <None Include="shaders\brdf.vert" />
   </ItemGroup>
 </Project>

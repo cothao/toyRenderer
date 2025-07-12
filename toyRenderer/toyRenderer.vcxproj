@@ -202,6 +202,9 @@
     <None Include="assimp-vc140-mt.dll" />
     <None Include="freetype.dll" />
     <None Include="imgui.ini" />
+    <None Include="shaders\brdf.frag" />
+    <None Include="shaders\brdf.vert" />
+    <None Include="shaders\convolutionShader.frag" />
     <None Include="shaders\cubemap.frag" />
     <None Include="shaders\cubemap.vert" />
     <None Include="shaders\equirectangular.frag" />
@@ -211,6 +214,7 @@
     <None Include="shaders\model.vert" />
     <None Include="shaders\pbr_no_map.frag" />
     <None Include="shaders\pbr_no_map.vert" />
+    <None Include="shaders\prefilter.frag" />
     <None Include="shaders\sphere_pbr.frag" />
     <None Include="shaders\sphere_pbr.vert" />
   </ItemGroup>

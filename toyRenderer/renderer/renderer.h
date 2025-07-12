@@ -24,6 +24,9 @@ namespace Renderer
 	extern unsigned int captureFBO;
 	extern unsigned int captureRBO;
 	extern unsigned int envCubemap;
+	extern unsigned int irradianceMap;
+	extern unsigned int prefilterMap;
+	extern unsigned int brdfLUTTexture;
 
 	// Initializes models, shaders, buffers, matrices, etc.
 	void Init();

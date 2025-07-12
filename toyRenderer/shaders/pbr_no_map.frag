@@ -6,10 +6,13 @@ in vec3 Normal;
 in vec2 TexCoords;
 in vec3 FragPos;
 
+uniform samplerCube irradianceMap;
+uniform samplerCube prefilterMap;
+uniform sampler2D   brdfLUT;  
+
 uniform vec3 lightPosition[4];
 uniform vec3 lightColor[4];
 uniform vec3 albedo;
-
 uniform float roughness;
 uniform float metallic;
 uniform float ao;
@@ -29,6 +32,8 @@ float PBR(vec3 lightEmission, float BRDF, vec3 lightColor, float cosTheta);
 
 float BRDF(float GGX, float Smith, float Schlick);
 
+vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness);
+
 vec3 F0 = vec3(0.4);
 
 vec3 bReflectivity = vec3(0.4);
@@ -41,6 +46,7 @@ void main()
 	
 	vec3 Lo = vec3(0.);
 	vec3 fLambert = albedo/PI;
+	vec3 R = reflect(-V, N);   
 	
 	for (int i = 0; i < 4; i++)
 	{
@@ -57,7 +63,7 @@ void main()
 
 		float G = Smith(L, N, V, roughness);
 
-		vec3 F = Schlick(V, H, F0);
+		vec3 F =  Schlick(V, N, F0);
 
 		vec3 ks = F;
 		vec3 kd = vec3(1.) - ks;
@@ -77,7 +83,18 @@ void main()
 	
 	};
 
-	vec3 ambient = vec3(0.03) * albedo * ao;
+	vec3 F = fresnelSchlickRoughness(max(dot(V,N), 0.), F0, roughness);
+	vec3 kS = F;
+	vec3 kD = 1.0 - kS;
+	vec3 irradiance = texture(irradianceMap, N).rgb;
+	vec3 diffuse    = irradiance * albedo;
+
+	const float MAX_REFLECTION_LOD = 4.0;
+	vec3 prefilteredColor = textureLod(prefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;   
+	vec2 envBRDF  = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
+	vec3 specular = prefilteredColor * (F * envBRDF.x + envBRDF.y);
+
+	vec3 ambient = (kD * diffuse + specular) * ao;
     vec3 color = ambient + Lo;
 	
     color = color / (color + vec3(1.0));
@@ -86,6 +103,11 @@ void main()
 	FragColor = vec4(color, 1.);
 
 }
+
+vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
+{
+    return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}   
 
 vec3 Schlick(vec3 V, vec3 H, vec3 F0)
 {
