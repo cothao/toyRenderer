@@ -5,6 +5,7 @@
 #include "../shaderDirectory/shaderDirectory.h"
 #include "../modelDirectory/modelDirectory.h"
 #include "../textureDirectory/textureDirectory.h"
+#include "../framebufferManager/framebufferManager.h"
 #include "../camera.h"
 
 namespace Renderer

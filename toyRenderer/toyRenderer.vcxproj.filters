@@ -93,7 +93,10 @@
     <ClCompile Include="textureDirectory\textureDirectory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="framebufferDirectory\framebufferDirectory.cpp">
+    <ClCompile Include="framebufferManager\framebufferManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="environmentMapManager\environmentMapManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -176,7 +179,10 @@
     <ClInclude Include="textureDirectory\textureDirectory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="framebufferDirectory\framebufferDirectory.h">
+    <ClInclude Include="framebufferManager\framebufferManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="environmentMapManager\environmentMapManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

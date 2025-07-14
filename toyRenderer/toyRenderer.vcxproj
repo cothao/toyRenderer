@@ -144,9 +144,10 @@
     <ClCompile Include="api\api.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="editor\editor.cpp" />
+    <ClCompile Include="environmentMapManager\environmentMapManager.cpp" />
     <ClCompile Include="example.cpp" />
     <ClCompile Include="fileDialog\fileDialog.cpp" />
-    <ClCompile Include="framebufferDirectory\framebufferDirectory.cpp" />
+    <ClCompile Include="framebufferManager\framebufferManager.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="input\input.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -174,8 +175,9 @@
     <ClInclude Include="assimpglmhelpers.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="editor\editor.h" />
+    <ClInclude Include="environmentMapManager\environmentMapManager.h" />
     <ClInclude Include="fileDialog\fileDialog.h" />
-    <ClInclude Include="framebufferDirectory\framebufferDirectory.h" />
+    <ClInclude Include="framebufferManager\framebufferManager.h" />
     <ClInclude Include="input\input.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />

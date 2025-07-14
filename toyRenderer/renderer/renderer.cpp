@@ -58,13 +58,7 @@ void Renderer::Init()
       *                                                                 
       */
 
-	glGenFramebuffers(1, &captureFBO);
-	glGenRenderbuffers(1, &captureRBO);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
+	FramebufferManager::SetFBO("capture");
 
 	TextureDirectory::SetTexture("rusted_metal_base_map", "../images/rusted_metal/rustediron2_basecolor.png", true);
 	TextureDirectory::SetTexture("rusted_metal_metallic_map", "../images/rusted_metal/rustediron2_metallic.png", true);
@@ -133,7 +127,7 @@ void Renderer::Init()
 	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("photo_studio"));
 
 	glViewport(0, 0, 512, 512); // don't forget to configure the viewport to the capture dimensions.
-	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FramebufferManager::GetFBO("capture").FBO);
 	for (unsigned int i = 0; i < 6; ++i)
 	{
 		ShaderDirectory::GetShader("equirectangular").SetMat4("view", captureViews[i]);
@@ -161,8 +155,8 @@ void Renderer::Init()
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FramebufferManager::GetFBO("capture").FBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, FramebufferManager::GetFBO("capture").RBO);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 32, 32);
 
 	ShaderDirectory::GetShader("irradianceShader").Use();
@@ -172,7 +166,7 @@ void Renderer::Init()
 	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
 
 	glViewport(0, 0, 32, 32); // don't forget to configure the viewport to the capture dimensions.
-	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FramebufferManager::GetFBO("capture").FBO);
 	for (unsigned int i = 0; i < 6; ++i)
 	{
 		ShaderDirectory::GetShader("irradianceShader").SetMat4("view", captureViews[i]);
@@ -206,14 +200,14 @@ void Renderer::Init()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FramebufferManager::GetFBO("capture").FBO);
 	unsigned int maxMipLevels = 5;
 	for (unsigned int mip = 0; mip < maxMipLevels; ++mip)
 	{
 		// reisze framebuffer according to mip-level size.
 		unsigned int mipWidth = 128 * std::pow(0.5, mip);
 		unsigned int mipHeight = 128 * std::pow(0.5, mip);
-		glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+		glBindRenderbuffer(GL_RENDERBUFFER, FramebufferManager::GetFBO("capture").RBO);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);
 		glViewport(0, 0, mipWidth, mipHeight);
 
@@ -243,8 +237,8 @@ void Renderer::Init()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FramebufferManager::GetFBO("capture").FBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, FramebufferManager::GetFBO("capture").RBO);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdfLUTTexture, 0);
 

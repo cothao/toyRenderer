@@ -3,7 +3,7 @@ C:\Users\colli\source\repos\toyRenderer\toyRenderer\camera.cpp;C:\Users\colli\so
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\editor\editor.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\editor.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\example.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\example.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\fileDialog\fileDialog.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\fileDialog.obj
-C:\Users\colli\source\repos\toyRenderer\toyRenderer\framebufferDirectory\framebufferDirectory.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\framebufferDirectory.obj
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\framebufferManager\framebufferManager.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\framebufferManager.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\glad.c;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\glad.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\input\input.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\input.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\imgui\imgui.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\imgui.obj
