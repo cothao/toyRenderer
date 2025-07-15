@@ -6,6 +6,7 @@
 #include "../modelDirectory/modelDirectory.h"
 #include "../textureDirectory/textureDirectory.h"
 #include "../framebufferManager/framebufferManager.h"
+#include "../environmentMapManager/environmentMapManager.h"
 #include "../camera.h"
 
 namespace Renderer
@@ -22,8 +23,6 @@ namespace Renderer
 	extern glm::vec3 lightColors[];
 	extern float roughness;
 	extern float metallic;
-	extern unsigned int captureFBO;
-	extern unsigned int captureRBO;
 	extern unsigned int envCubemap;
 	extern unsigned int irradianceMap;
 	extern unsigned int prefilterMap;
@@ -41,8 +40,9 @@ namespace Renderer
 	void InitShaders();
 	void InitModels();
 	void ConfigureShaders();
-	void DrawObject();
+	void DrawObjects();
 	void DrawModel(std::string modelName, std::string shaderName);
+	void DrawLights();
 
 	glm::mat4 GetModelMatrix();
 	glm::mat4 GetViewMatrix();

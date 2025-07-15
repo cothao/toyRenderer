@@ -12,6 +12,11 @@ void TextureDirectory::SetTexture(std::string name, const char * path, bool gamm
 	Directory[name] = LoadTexture(path, gamma);
 }
 
+void TextureDirectory::SetLookupTexture(std::string name)
+{
+	Directory[name] = LoadLookupTexture();
+}
+
 void TextureDirectory::SetHDRTexture(std::string name, const char* path)
 {
 
@@ -112,5 +117,53 @@ unsigned int TextureDirectory::LoadHDRTexture(const char* path)
 	}
 
 	return hdrTexture;
+
+}
+
+unsigned int TextureDirectory::LoadLookupTexture()
+{
+
+	unsigned int LUTTexture;
+
+	glGenTextures(1, &LUTTexture);
+
+	// pre-allocate enough memory for the LUT texture.
+	glBindTexture(GL_TEXTURE_2D, LUTTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, 512, 512, 0, GL_RG, GL_FLOAT, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	return LUTTexture;
+
+}
+
+void TextureDirectory::BindPBRTextures(unsigned int irradianceMap, unsigned int prefilterMap)
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("brdfLUTTexture"));
+}
+
+void TextureDirectory::BindMapTextures(unsigned int base, unsigned int metallic, unsigned int normal, unsigned int roughness)
+{
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, base);
+
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, metallic);
+
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, normal);
+
+	glActiveTexture(GL_TEXTURE6);
+	glBindTexture(GL_TEXTURE_2D, roughness);
 
 }

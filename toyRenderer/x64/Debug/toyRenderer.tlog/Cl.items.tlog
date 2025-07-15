@@ -1,6 +1,7 @@
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\api\api.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\api.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\camera.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\camera.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\editor\editor.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\editor.obj
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\environmentMapManager\environmentMapManager.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\environmentMapManager.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\example.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\example.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\fileDialog\fileDialog.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\fileDialog.obj
 C:\Users\colli\source\repos\toyRenderer\toyRenderer\framebufferManager\framebufferManager.cpp;C:\Users\colli\source\repos\toyRenderer\toyRenderer\x64\Debug\framebufferManager.obj
