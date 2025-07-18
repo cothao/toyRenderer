@@ -205,5 +205,7 @@
     <None Include="shaders\prefilter.frag" />
     <None Include="shaders\brdf.frag" />
     <None Include="shaders\brdf.vert" />
+    <None Include="shaders\background.frag" />
+    <None Include="shaders\background.vert" />
   </ItemGroup>
 </Project>

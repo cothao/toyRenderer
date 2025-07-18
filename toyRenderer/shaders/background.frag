@@ -4,7 +4,7 @@ out vec4 FragColor;
 in vec3 localPos;
   
 uniform samplerCube environmentMap;
-
+  
 void main()
 {
     vec3 envColor = textureLod(environmentMap, localPos, 0.0).rgb;

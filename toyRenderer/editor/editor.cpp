@@ -3,21 +3,30 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "../modelDirectory/modelDirectory.h"
+#include "../renderer/renderer.h"
 
 namespace Editor
 {
+	namespace ObjectContext
+	{
+
+	    float* roughness = &Renderer::roughness;
+		float* metallic = &Renderer::metallic;
+		extern glm::vec4 * albedo = &Renderer::albedo;
+
+	};
 
     bool show_demo_window = true;
     bool show_another_window = false;
     ImVec4 clear_color = {};
     ImGuiIO* io = nullptr;
+
     namespace
     {
         float getMainScale()
         {
             return ImGui_ImplGlfw_GetContentScaleForMonitor(API::getPrimaryMonitorPointer());
         }
-
     }
 }
 
@@ -65,7 +74,6 @@ void Editor::StartFrame()
 
     // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
     {
-        static float f = 0.0f;
         static int counter = 0;
 
         ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
@@ -74,8 +82,11 @@ void Editor::StartFrame()
         ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
         ImGui::Checkbox("Another Window", &show_another_window);
 
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::SliderFloat("float", ObjectContext::roughness, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::SliderFloat("metallic", ObjectContext::metallic, 0.0f, 1.0f);
+        ImGui::ColorEdit3("albedo", (float*)ObjectContext::albedo); // Edit 3 floats representing a color
         ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
 
         if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
             counter++;

@@ -204,6 +204,8 @@
     <None Include="assimp-vc140-mt.dll" />
     <None Include="freetype.dll" />
     <None Include="imgui.ini" />
+    <None Include="shaders\background.frag" />
+    <None Include="shaders\background.vert" />
     <None Include="shaders\brdf.frag" />
     <None Include="shaders\brdf.vert" />
     <None Include="shaders\convolutionShader.frag" />

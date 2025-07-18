@@ -54,7 +54,7 @@ int main()
 
         Renderer::SetModelMatrix(glm::mat4(1.));
         Renderer::SetViewMatrix(camera.View);
-
+        
         Renderer::SetCameraPosition(camera.CameraPos);
 
         Renderer::RenderScene();

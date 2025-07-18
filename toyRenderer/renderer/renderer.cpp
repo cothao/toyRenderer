@@ -4,10 +4,11 @@
 
 namespace Renderer
 {
+	extern glm::vec3 cameraPos = glm::vec3(1.);
+	extern glm::vec4 albedo = glm::vec4(1., 0., 0., 1.);
 	extern glm::mat4 model = glm::mat4(1.);
 	extern glm::mat4 view = glm::mat4(1.);
 	extern glm::mat4 projection = glm::mat4(1.);
-	extern glm::vec3 cameraPos = glm::vec3(1.);
 	extern glm::mat4 MVP = glm::mat4(1.);
 	extern int nrRows = 7;
 	extern int nrColumns = 7;
@@ -46,7 +47,9 @@ void Renderer::Init()
 	TextureDirectory::SetTexture("rusted_metal_roughness_map", "../images/rusted_metal/rustediron2_roughness.png", true);
 	TextureDirectory::SetLookupTexture("brdfLUTTexture");
 	
-	TextureDirectory::SetHDRTexture("photo_studio", "../images/photo_studio_loft_hall_4k.hdr");
+	TextureDirectory::SetHDRTexture("photo_studio", "../images/hdr/photo_studio_loft_hall_4k.hdr");
+	TextureDirectory::SetHDRTexture("field", "../images/hdr/horn-koppe_spring_4k.hdr");
+	TextureDirectory::SetHDRTexture("loft", "../images/hdr/newport_loft.hdr");
 
 	InitShaders();
 	InitModels();
@@ -87,7 +90,7 @@ void Renderer::Init()
 	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
 	};
 
-	FramebufferManager::GenerateCubemapFromEnvironmentMap(ShaderDirectory::GetShader("equirectangular"), TextureDirectory::GetTexture("photo_studio"), EnvironmentMapManager::GetEnvCubeMap(), captureProjection, captureViews);
+	FramebufferManager::GenerateCubemapFromEnvironmentMap(ShaderDirectory::GetShader("equirectangular"), TextureDirectory::GetTexture("loft"), EnvironmentMapManager::GetEnvCubeMap(), captureProjection, captureViews);
 
 	EnvironmentMapManager::SetIrradianceMap();
 
@@ -142,6 +145,12 @@ void Renderer::RenderScene()
 	ClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.f));
 	ClearBuffers();
 
+	TextureDirectory::BindMapTextures(
+		TextureDirectory::GetTexture("rusted_metal_base_map"),
+		TextureDirectory::GetTexture("rusted_metal_metallic_map"),
+		TextureDirectory::GetTexture("rusted_metal_normal_map"),
+		TextureDirectory::GetTexture("rusted_metal_roughness_map"));
+
 	TextureDirectory::BindPBRTextures(EnvironmentMapManager::GetIrradianceMap(), EnvironmentMapManager::GetPrefilterMap());
 
 	DrawObjects();
@@ -175,8 +184,9 @@ void Renderer::InitShaders()
 	ShaderDirectory::SetShader("pbrNoMap", Shader("./shaders/pbr_no_map.vert", "./shaders/pbr_no_map.frag", nullptr));
 	ShaderDirectory::SetShader("equirectangular", Shader("./shaders/equirectangular.vert", "./shaders/equirectangular.frag", nullptr));
 	ShaderDirectory::SetShader("cubemap", Shader("./shaders/cubemap.vert", "./shaders/cubemap.frag", nullptr));
-	ShaderDirectory::SetShader("irradianceShader", Shader("./shaders/cubemap.vert", "./shaders/convolutionShader.frag", nullptr));
-	ShaderDirectory::SetShader("prefilterShader", Shader("./shaders/cubemap.vert", "./shaders/prefilter.frag", nullptr));
+	ShaderDirectory::SetShader("background", Shader("./shaders/background.vert", "./shaders/background.frag", nullptr));
+	ShaderDirectory::SetShader("irradianceShader", Shader("./shaders/equirectangular.vert", "./shaders/convolutionShader.frag", nullptr));
+	ShaderDirectory::SetShader("prefilterShader", Shader("./shaders/equirectangular.vert", "./shaders/prefilter.frag", nullptr));
 	ShaderDirectory::SetShader("brdfShader", Shader("./shaders/brdf.vert", "./shaders/brdf.frag", nullptr));
 
 }
@@ -208,13 +218,8 @@ glm::vec3 Renderer::GetCameraPosition()
 
 void Renderer::DrawObjects()
 {
-	ShaderDirectory::GetShader("sphereShader").Use();
 
-	TextureDirectory::BindMapTextures(
-		TextureDirectory::GetTexture("rusted_metal_base_map"),
-		TextureDirectory::GetTexture("rusted_metal_metallic_map"),
-		TextureDirectory::GetTexture("rusted_metal_normal_map"),
-		TextureDirectory::GetTexture("rusted_metal_roughness_map"));
+	ShaderDirectory::GetShader("sphereShader").Use();
 
 	ShaderDirectory::GetShader("sphereShader").SetVec3("camPos", Renderer::GetCameraPosition());
 
@@ -244,7 +249,7 @@ void Renderer::DrawObjects()
 	SetModelMatrix(stageModel);
 
 	ShaderDirectory::GetShader("pbrNoMap").SetVec3("camPos", Renderer::GetCameraPosition());
-	ShaderDirectory::GetShader("pbrNoMap").SetVec3("albedo", glm::vec3(1., 0., 0.));
+	ShaderDirectory::GetShader("pbrNoMap").SetVec3("albedo", glm::vec3(albedo.r, albedo.g, albedo.b));
 
 	for (int i = 0; i < 4; i++)
 	{
