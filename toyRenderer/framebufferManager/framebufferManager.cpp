@@ -17,6 +17,11 @@ Buffer FramebufferManager::GetFBO(std::string name)
 
 void FramebufferManager::SetFBO(std::string name)
 {
+	if (Directory.find(name) != Directory.end())
+	{
+		return; // FBO already exists
+	}
+
 	unsigned int FBO;
 	unsigned int RBO;
 	glGenFramebuffers(1, &FBO);

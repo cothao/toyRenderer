@@ -3,6 +3,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "../modelDirectory/modelDirectory.h"
+#include "../textureDirectory/textureDirectory.h"
 #include "../renderer/renderer.h"
 
 namespace Editor
@@ -149,7 +150,9 @@ void Editor::Config()
     if (ImGui::MenuItem("New")) {}
     if (ImGui::MenuItem("Open", "Ctrl+O")) 
     {
-        ModelDirectory::SetModelFromFile();
+        //ModelDirectory::SetModelFromFile();
+        TextureDirectory::SetHDRTextureFromFile();
+
     }
     if (ImGui::BeginMenu("Open Recent"))
     {

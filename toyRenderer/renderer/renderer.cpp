@@ -16,6 +16,8 @@ namespace Renderer
 	extern float metallic = 1.f;
 	extern float roughness = .0f;
 	extern unsigned int brdfLUTTexture = 0;
+	extern std::string currentHDRTexture = "loft";
+	extern std::string lastHDRTexture = currentHDRTexture;
 
 	extern glm::vec3 lightPositions[] = {
 	glm::vec3(-10.0f,  10.0f, 10.0f),
@@ -79,28 +81,7 @@ void Renderer::Init()
 
 	EnvironmentMapManager::SetEnvCubeMap();
 
-	glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
-	glm::mat4 captureViews[] =
-	{
-	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
-	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
-	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
-	};
-
-	FramebufferManager::GenerateCubemapFromEnvironmentMap(ShaderDirectory::GetShader("equirectangular"), TextureDirectory::GetTexture("loft"), EnvironmentMapManager::GetEnvCubeMap(), captureProjection, captureViews);
-
-	EnvironmentMapManager::SetIrradianceMap();
-
-	FramebufferManager::GenerateCubemapFromIrradianceMap(ShaderDirectory::GetShader("irradianceShader"), EnvironmentMapManager::GetIrradianceMap(), EnvironmentMapManager::GetEnvCubeMap(), captureProjection, captureViews);
-
-	EnvironmentMapManager::SetPrefilterMap();
-
-	FramebufferManager::GenerateCubemapFromPrefilterMap(ShaderDirectory::GetShader("prefilterShader"), EnvironmentMapManager::GetPrefilterMap(), EnvironmentMapManager::GetEnvCubeMap(), captureProjection, captureViews);
-
-	FramebufferManager::GenerateTextureFromFramebuffer(ShaderDirectory::GetShader("brdfShader"), TextureDirectory::GetTexture("brdfLUTTexture"));
+	InitEnvironmentMap();
 
 	ShaderDirectory::GetShader("cubemap").Use();
 	ShaderDirectory::GetShader("cubemap").SetMat4("projection", projection);
@@ -144,6 +125,8 @@ void Renderer::RenderScene()
 
 	ClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.f));
 	ClearBuffers();
+
+	ChangeHDRState();
 
 	TextureDirectory::BindMapTextures(
 		TextureDirectory::GetTexture("rusted_metal_base_map"),
@@ -289,6 +272,47 @@ void Renderer::DrawLights()
 		ShaderDirectory::GetShader("lightShader").SetMat4("view", view);
 		ShaderDirectory::GetShader("lightShader").SetMat4("projection", projection);
 		Object::Sphere();
+
+	}
+}
+
+void Renderer::InitEnvironmentMap()
+{
+
+	glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+	glm::mat4 captureViews[] =
+	{
+	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
+	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+	};
+
+
+	FramebufferManager::GenerateCubemapFromEnvironmentMap(ShaderDirectory::GetShader("equirectangular"), TextureDirectory::GetTexture(currentHDRTexture), EnvironmentMapManager::GetEnvCubeMap(), captureProjection, captureViews);
+
+	EnvironmentMapManager::SetIrradianceMap();
+
+	FramebufferManager::GenerateCubemapFromIrradianceMap(ShaderDirectory::GetShader("irradianceShader"), EnvironmentMapManager::GetIrradianceMap(), EnvironmentMapManager::GetEnvCubeMap(), captureProjection, captureViews);
+
+	EnvironmentMapManager::SetPrefilterMap();
+
+	FramebufferManager::GenerateCubemapFromPrefilterMap(ShaderDirectory::GetShader("prefilterShader"), EnvironmentMapManager::GetPrefilterMap(), EnvironmentMapManager::GetEnvCubeMap(), captureProjection, captureViews);
+
+	FramebufferManager::GenerateTextureFromFramebuffer(ShaderDirectory::GetShader("brdfShader"), TextureDirectory::GetTexture("brdfLUTTexture"));
+
+}
+
+void Renderer::ChangeHDRState()
+{
+	// Move this to separate function
+	if (lastHDRTexture != currentHDRTexture)
+	{
+
+		InitEnvironmentMap();
+		lastHDRTexture = currentHDRTexture;
 
 	}
 }

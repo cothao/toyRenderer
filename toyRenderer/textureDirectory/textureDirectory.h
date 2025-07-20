@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <glad/glad.h>
+#include "../fileDialog/fileDialog.h"
 
 namespace TextureDirectory
 {
@@ -17,6 +18,7 @@ namespace TextureDirectory
 	unsigned int LoadLookupTexture();
 	void BindPBRTextures(unsigned int irradianceMap, unsigned int prefilterMap);
 	void BindMapTextures(unsigned int base, unsigned int metallic, unsigned int normal, unsigned int roughness);
+	void SetHDRTextureFromFile();
 
 }
 

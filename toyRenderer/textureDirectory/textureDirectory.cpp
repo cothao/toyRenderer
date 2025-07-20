@@ -1,6 +1,7 @@
 #include "./textureDirectory.h"
 #include "../stb_image.h"
 #include <iostream>
+#include "../renderer/renderer.h"
 
 namespace TextureDirectory
 {
@@ -165,5 +166,21 @@ void TextureDirectory::BindMapTextures(unsigned int base, unsigned int metallic,
 
 	glActiveTexture(GL_TEXTURE6);
 	glBindTexture(GL_TEXTURE_2D, roughness);
+
+}
+
+void TextureDirectory::SetHDRTextureFromFile()
+{
+	const char* texturePath = FileDialog::getFile();
+
+	std::string modelName = strrchr(texturePath, '\\');
+	std::cout << modelName << '\n';
+	if (!texturePath)
+		std::cout << "ERROR | Model not found\n";
+	std::cout << texturePath << '\n';
+
+	Directory[modelName] = LoadHDRTexture(texturePath);
+	
+	Renderer::currentHDRTexture = modelName;
 
 }

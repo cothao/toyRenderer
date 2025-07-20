@@ -28,6 +28,8 @@ namespace Renderer
 	extern unsigned int irradianceMap;
 	extern unsigned int prefilterMap;
 	extern unsigned int brdfLUTTexture;
+	extern std::string currentHDRTexture;
+	extern std::string lastHDRTexture;
 
 	// Initializes models, shaders, buffers, matrices, etc.
 	void Init();
@@ -40,10 +42,12 @@ namespace Renderer
 	void RenderScene();
 	void InitShaders();
 	void InitModels();
+	void InitEnvironmentMap();
 	void ConfigureShaders();
 	void DrawObjects();
 	void DrawModel(std::string modelName, std::string shaderName);
 	void DrawLights();
+	void ChangeHDRState();
 
 	glm::mat4 GetModelMatrix();
 	glm::mat4 GetViewMatrix();

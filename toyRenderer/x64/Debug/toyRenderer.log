@@ -1,2 +1,4 @@
-﻿  environmentMapManager.cpp
+﻿  framebufferManager.cpp
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\framebufferManager\framebufferManager.cpp(110,25): warning C4244: 'initializing': conversion from 'double' to 'unsigned int', possible loss of data
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\framebufferManager\framebufferManager.cpp(111,26): warning C4244: 'initializing': conversion from 'double' to 'unsigned int', possible loss of data
   toyRenderer.vcxproj -> C:\Users\colli\source\repos\toyRenderer\x64\Debug\toyRenderer.exe
