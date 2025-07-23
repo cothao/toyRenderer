@@ -152,7 +152,7 @@ void TextureDirectory::BindPBRTextures(unsigned int irradianceMap, unsigned int 
 	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("brdfLUTTexture"));
 }
 
-void TextureDirectory::BindMapTextures(unsigned int base, unsigned int metallic, unsigned int normal, unsigned int roughness)
+void TextureDirectory::BindMapTextures(unsigned int base, unsigned int metallic, unsigned int normal, unsigned int roughness, unsigned int ao)
 {
 
 	glActiveTexture(GL_TEXTURE3);
@@ -167,6 +167,20 @@ void TextureDirectory::BindMapTextures(unsigned int base, unsigned int metallic,
 	glActiveTexture(GL_TEXTURE6);
 	glBindTexture(GL_TEXTURE_2D, roughness);
 
+	glActiveTexture(GL_TEXTURE7);
+	glBindTexture(GL_TEXTURE_2D, ao);
+
+}
+
+void TextureDirectory::BindModelTextureMappings(std::string modelName)
+{
+	BindMapTextures(
+		GetTexture(modelName + "_base_map"),
+		GetTexture(modelName + "_metallic_map"),
+		GetTexture(modelName + "_normal_map"),
+		GetTexture(modelName + "_roughness_map"),
+		GetTexture(modelName + "_ao_map")
+	);
 }
 
 void TextureDirectory::SetHDRTextureFromFile()
@@ -183,4 +197,13 @@ void TextureDirectory::SetHDRTextureFromFile()
 	
 	Renderer::currentHDRTexture = modelName;
 
+}
+
+void TextureDirectory::Unbind2DMaps()
+{
+	for (int i = 3; i < 8; i++)
+	{
+		glActiveTexture(GL_TEXTURE3 + i);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 }

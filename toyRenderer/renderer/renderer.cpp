@@ -47,6 +47,25 @@ void Renderer::Init()
 	TextureDirectory::SetTexture("rusted_metal_metallic_map", "../images/rusted_metal/rustediron2_metallic.png", true);
 	TextureDirectory::SetTexture("rusted_metal_normal_map", "../images/rusted_metal/rustediron2_normal.png", true);
 	TextureDirectory::SetTexture("rusted_metal_roughness_map", "../images/rusted_metal/rustediron2_roughness.png", true);
+	TextureDirectory::SetTexture("rusted_metal_ao_map", "../images/rusted_metal/rustediron2_roughness.png", true);
+
+	TextureDirectory::SetTexture("gun_base_map", "../assets/Cerberus_by_Andrew_Maximov/Cerberus_by_Andrew_Maximov/Textures/Cerberus_A.png", true);
+	TextureDirectory::SetTexture("gun_metallic_map", "../assets/Cerberus_by_Andrew_Maximov/Cerberus_by_Andrew_Maximov/Textures/Cerberus_M.png", true);
+	TextureDirectory::SetTexture("gun_normal_map", "../assets/Cerberus_by_Andrew_Maximov/Cerberus_by_Andrew_Maximov/Textures/Cerberus_N.png", true);
+	TextureDirectory::SetTexture("gun_roughness_map", "../assets/Cerberus_by_Andrew_Maximov/Cerberus_by_Andrew_Maximov/Textures/Cerberus_R.png", true);
+
+	TextureDirectory::SetTexture("mask_base_map", "../assets/pbr-kabuto-samurai-helmet/textures/BaseColor.png", true);
+	TextureDirectory::SetTexture("mask_metallic_map", "../assets/pbr-kabuto-samurai-helmet/textures/Metalness.png", true);
+	TextureDirectory::SetTexture("mask_normal_map", "../assets/pbr-kabuto-samurai-helmet/textures/NormalMap.png", true);
+	TextureDirectory::SetTexture("mask_roughness_map", "../assets/pbr-kabuto-samurai-helmet/textures/Roughness.png", true);
+	TextureDirectory::SetTexture("mask_ao_map", "../assets/pbr-kabuto-samurai-helmet/textures/AOMap.png", true);
+
+	TextureDirectory::SetTexture("backpack_base_map", "../assets/backpack/diffuse.jpg", true);
+	TextureDirectory::SetTexture("backpack_metallic_map", "../assets/backpack/specular.jpg", true);
+	TextureDirectory::SetTexture("backpack_normal_map", "../assets/backpack/normal.jpg", true);
+	TextureDirectory::SetTexture("backpack_roughness_map", "../assets/backpack/roughness.jpg", true);
+	TextureDirectory::SetTexture("backpack_ao_map", "../assets/backpack/ao.jpg", true);
+
 	TextureDirectory::SetLookupTexture("brdfLUTTexture");
 	
 	TextureDirectory::SetHDRTexture("photo_studio", "../images/hdr/photo_studio_loft_hall_4k.hdr");
@@ -56,6 +75,11 @@ void Renderer::Init()
 	InitShaders();
 	InitModels();
 
+	ShaderDirectory::GetShader("modelShader").Use();
+	ShaderDirectory::GetShader("modelShader").SetInt("texture_diffuse1", 0);
+	ShaderDirectory::GetShader("modelShader").SetMat4("view", view);
+	ShaderDirectory::GetShader("modelShader").SetMat4("projection", projection);
+
 	ShaderDirectory::GetShader("pbrNoMap").Use();
 	ShaderDirectory::GetShader("pbrNoMap").SetMat4("view", view);
 	ShaderDirectory::GetShader("pbrNoMap").SetMat4("projection", projection);
@@ -63,16 +87,17 @@ void Renderer::Init()
 	ShaderDirectory::GetShader("pbrNoMap").SetInt("prefilterMap", 1);
 	ShaderDirectory::GetShader("pbrNoMap").SetInt("brdfLUT", 2);
 
-	ShaderDirectory::GetShader("sphereShader").Use();
-	ShaderDirectory::GetShader("sphereShader").SetMat4("view", view);
-	ShaderDirectory::GetShader("sphereShader").SetMat4("projection", projection);
-	ShaderDirectory::GetShader("sphereShader").SetFloat("ao", 1.f);
-	ShaderDirectory::GetShader("sphereShader").SetInt("base_map", 3);
-	ShaderDirectory::GetShader("sphereShader").SetInt("metallic_map", 4);
-	ShaderDirectory::GetShader("sphereShader").SetInt("normal_map", 5);
-	ShaderDirectory::GetShader("sphereShader").SetInt("roughness_map", 6);
-	ShaderDirectory::GetShader("sphereShader").SetInt("prefilterMap", 1);
-	ShaderDirectory::GetShader("sphereShader").SetInt("brdfLUT", 2);
+	ShaderDirectory::GetShader("pbrMaterial").Use();
+	ShaderDirectory::GetShader("pbrMaterial").SetMat4("view", view);
+	ShaderDirectory::GetShader("pbrMaterial").SetMat4("projection", projection);
+	//ShaderDirectory::GetShader("pbrMaterial").SetFloat("ao", 0.f);
+	ShaderDirectory::GetShader("pbrMaterial").SetInt("base_map", 3);
+	ShaderDirectory::GetShader("pbrMaterial").SetInt("metallic_map", 4);
+	ShaderDirectory::GetShader("pbrMaterial").SetInt("normal_map", 5);
+	ShaderDirectory::GetShader("pbrMaterial").SetInt("roughness_map", 6);
+	ShaderDirectory::GetShader("pbrMaterial").SetInt("aoMap", 7);
+	ShaderDirectory::GetShader("pbrMaterial").SetInt("prefilterMap", 1);
+	ShaderDirectory::GetShader("pbrMaterial").SetInt("brdfLUT", 2);
 
 	ShaderDirectory::GetShader("equirectangular").Use();
 	ShaderDirectory::GetShader("equirectangular").SetInt("equirectangularMap", 0);
@@ -132,11 +157,38 @@ void Renderer::RenderScene()
 		TextureDirectory::GetTexture("rusted_metal_base_map"),
 		TextureDirectory::GetTexture("rusted_metal_metallic_map"),
 		TextureDirectory::GetTexture("rusted_metal_normal_map"),
-		TextureDirectory::GetTexture("rusted_metal_roughness_map"));
+		TextureDirectory::GetTexture("rusted_metal_roughness_map"),
+		TextureDirectory::GetTexture("rusted_metal_ao_map")
+		);
 
 	TextureDirectory::BindPBRTextures(EnvironmentMapManager::GetIrradianceMap(), EnvironmentMapManager::GetPrefilterMap());
 
 	DrawObjects();
+
+	// Draw the models in the model directory
+
+	//stbi_set_flip_vertically_on_load(false);
+
+	ShaderDirectory::GetShader("pbrMaterial").Use();
+
+	//TextureDirectory::BindModelTextureMappings("gun");
+
+	//TextureDirectory::BindModelTextureMappings("mask");
+
+	TextureDirectory::BindModelTextureMappings("backpack");
+
+	model = glm::mat4(1.f);
+	model = glm::translate(model, glm::vec3(3.f, 0.f, 5.f));
+	model = glm::scale(model, glm::vec3(1.f, 1.f, 1.f));
+	//model = glm::rotate(model, glm::radians(-90.f), glm::vec3(1.f, 0.f, 0.f));
+	ShaderDirectory::GetShader("pbrMaterial").SetMat4("model", model);
+	ShaderDirectory::GetShader("pbrMaterial").SetMat4("view", view);
+	ShaderDirectory::GetShader("pbrMaterial").SetMat4("projection", projection);
+
+	for (auto modelKey = ModelDirectory::Directory.begin(); modelKey != ModelDirectory::Directory.end(); modelKey++)
+	{
+		DrawModel(modelKey->first, "pbrMaterial");
+	}
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, EnvironmentMapManager::GetEnvCubeMap());
@@ -148,13 +200,6 @@ void Renderer::RenderScene()
 
 	Object::Cube();
 
-	// Draw the models in the model directory
-	//for (auto modelKey = ModelDirectory::Directory.begin(); modelKey != ModelDirectory::Directory.end(); modelKey++)
-	//{
-	//	DrawModel(modelKey->first, "modelShader");
-	//}
-
-
 }
 
 // Initializes shaders from ShaderDirectory
@@ -162,7 +207,7 @@ void Renderer::InitShaders()
 {
 
 	ShaderDirectory::SetShader("modelShader", Shader("./shaders/model.vert", "./shaders/model.frag", nullptr));
-	ShaderDirectory::SetShader("sphereShader", Shader("./shaders/sphere_pbr.vert", "./shaders/sphere_pbr.frag", nullptr));
+	ShaderDirectory::SetShader("pbrMaterial", Shader("./shaders/sphere_pbr.vert", "./shaders/sphere_pbr.frag", nullptr));
 	ShaderDirectory::SetShader("lightShader", Shader("./shaders/sphere_pbr.vert", "./shaders/light.frag", nullptr));
 	ShaderDirectory::SetShader("pbrNoMap", Shader("./shaders/pbr_no_map.vert", "./shaders/pbr_no_map.frag", nullptr));
 	ShaderDirectory::SetShader("equirectangular", Shader("./shaders/equirectangular.vert", "./shaders/equirectangular.frag", nullptr));
@@ -176,7 +221,9 @@ void Renderer::InitShaders()
 
 void Renderer::InitModels()
 {
-
+	//ModelDirectory::SetModel("mask", Model("../assets/pbr-kabuto-samurai-helmet/source/HelmetPresentationLightMap.fbx.fbx"));
+	//ModelDirectory::SetModel("gun", Model("../assets/Cerberus_by_Andrew_Maximov/Cerberus_by_Andrew_Maximov/Cerberus_LP.fbx"));
+	ModelDirectory::SetModel("backpack", Model("../assets/backpack/backpack.obj"));
 }
 
 glm::mat4 Renderer::GetModelMatrix()
@@ -202,21 +249,21 @@ glm::vec3 Renderer::GetCameraPosition()
 void Renderer::DrawObjects()
 {
 
-	ShaderDirectory::GetShader("sphereShader").Use();
+	ShaderDirectory::GetShader("pbrMaterial").Use();
 
-	ShaderDirectory::GetShader("sphereShader").SetVec3("camPos", Renderer::GetCameraPosition());
+	ShaderDirectory::GetShader("pbrMaterial").SetVec3("camPos", Renderer::GetCameraPosition());
 
 	for (int i = 0; i < 4; i++)
 	{
 
-		ShaderDirectory::GetShader("sphereShader").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
-		ShaderDirectory::GetShader("sphereShader").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
+		ShaderDirectory::GetShader("pbrMaterial").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
+		ShaderDirectory::GetShader("pbrMaterial").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
 
 	}
 
-	ShaderDirectory::GetShader("sphereShader").SetMat4("view", view);
+	ShaderDirectory::GetShader("pbrMaterial").SetMat4("view", view);
 
-	ShaderDirectory::GetShader("sphereShader").SetMat4("model", model);
+	ShaderDirectory::GetShader("pbrMaterial").SetMat4("model", model);
 
 	Object::Sphere();
 

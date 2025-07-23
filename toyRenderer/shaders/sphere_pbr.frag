@@ -18,10 +18,12 @@ uniform sampler2D roughness_map;
 uniform samplerCube irradianceMap;
 uniform samplerCube prefilterMap;
 uniform sampler2D   brdfLUT;  
-
+uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_specular1;
+uniform sampler2D texture_normal1;
 //uniform float roughness;
 //uniform float metallic;
-uniform float ao;
+uniform sampler2D aoMap;
 uniform vec3 camPos;
 
 #define PI 3.14f
@@ -52,11 +54,12 @@ void main()
 	vec3 albedo = vec3(texture(base_map, TexCoords));
 	float metallic = texture(metallic_map, TexCoords).r;
 	float roughness = texture(roughness_map, TexCoords).r;
+	float ao = texture(aoMap, TexCoords).r;
 //	float metallic = texture(texture_metallic, TexCoords).r;
 	
 	vec3 N = getNormalFromMap();
 	vec3 V = normalize(camPos - FragPos);
-	vec3 R = reflect(-V, N);   
+	vec3 R = normalize(reflect(-V, N));   
 
 	vec3 Lo = vec3(0.);
 	vec3 fLambert = albedo/PI;
@@ -70,7 +73,6 @@ void main()
 		vec3 radiance = lightColor[i] * attenuation;
 
 		F0 = mix(F0, albedo, metallic);
-
 
 		float D = GGX(N, H, roughness);
 

@@ -17,8 +17,10 @@ namespace TextureDirectory
 	unsigned int LoadHDRTexture(const char * path);
 	unsigned int LoadLookupTexture();
 	void BindPBRTextures(unsigned int irradianceMap, unsigned int prefilterMap);
-	void BindMapTextures(unsigned int base, unsigned int metallic, unsigned int normal, unsigned int roughness);
+	void BindModelTextureMappings(std::string modelName);
+	void BindMapTextures(unsigned int base, unsigned int metallic, unsigned int normal, unsigned int roughness, unsigned int ao);
 	void SetHDRTextureFromFile();
+	void Unbind2DMaps();
 
 }
 

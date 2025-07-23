@@ -18,18 +18,30 @@ void Mesh::Draw(Shader& shader)
 
     for (unsigned int i = 0; i < textures.size(); i++)
     {
-        glActiveTexture(GL_TEXTURE0 + i);
+        glActiveTexture(GL_TEXTURE3 + i);
         std::string number;
         std::string name = textures[i].type;
-
-        if (name == "texture_diffuse")
+        if (textures[i].type == "texture_diffuse")
+        {
             number = std::to_string(diffuseNr++);
-        else if (name == "texture_specular")
+            name = "base_map";
+        }
+        else if (textures[i].type == "texture_specular")
+        {
             number = std::to_string(specularNr++);
-        else if (name == "texture_normal")
+            name = "metallic_map";
+
+        }
+        else if (textures[i].type == "texture_normal")
+        {
             number = std::to_string(normalNr++);
-        else if (name == "texture_height")
+            name = "normal_map";
+        }
+        else if (textures[i].type == "texture_height")
+        {
             number = std::to_string(heightNr++);
+            name = "height_map";
+        }
 
         glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
@@ -38,7 +50,7 @@ void Mesh::Draw(Shader& shader)
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE3);
 }
 
 void Mesh::setupMesh()
