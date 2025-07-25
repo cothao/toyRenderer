@@ -62,7 +62,7 @@ void Renderer::Init()
 
 	TextureDirectory::SetTexture("backpack_base_map", "../assets/backpack/diffuse.jpg", true);
 	TextureDirectory::SetTexture("backpack_metallic_map", "../assets/backpack/specular.jpg", true);
-	TextureDirectory::SetTexture("backpack_normal_map", "../assets/backpack/normal.jpg", true);
+	TextureDirectory::SetTexture("backpack_normal_map", "../assets/backpack/normal.png", true);
 	TextureDirectory::SetTexture("backpack_roughness_map", "../assets/backpack/roughness.jpg", true);
 	TextureDirectory::SetTexture("backpack_ao_map", "../assets/backpack/ao.jpg", true);
 
@@ -172,30 +172,26 @@ void Renderer::RenderScene()
 	ShaderDirectory::GetShader("pbrMaterial").Use();
 
 	//TextureDirectory::BindModelTextureMappings("gun");
-
+	
 	//TextureDirectory::BindModelTextureMappings("mask");
 
-	TextureDirectory::BindModelTextureMappings("backpack");
+	//TextureDirectory::BindModelTextureMappings("backpack");
 
 	model = glm::mat4(1.f);
 	model = glm::translate(model, glm::vec3(3.f, 0.f, 5.f));
-	model = glm::scale(model, glm::vec3(1.f, 1.f, 1.f));
-	//model = glm::rotate(model, glm::radians(-90.f), glm::vec3(1.f, 0.f, 0.f));
+	model = glm::scale(model, glm::vec3(0.1f, .1f, .1f));
+	model = glm::rotate(model, glm::radians(-90.f), glm::vec3(1.f, 0.f, 0.f));
 	ShaderDirectory::GetShader("pbrMaterial").SetMat4("model", model);
 	ShaderDirectory::GetShader("pbrMaterial").SetMat4("view", view);
 	ShaderDirectory::GetShader("pbrMaterial").SetMat4("projection", projection);
 
-	for (auto modelKey = ModelDirectory::Directory.begin(); modelKey != ModelDirectory::Directory.end(); modelKey++)
-	{
-		DrawModel(modelKey->first, "pbrMaterial");
-	}
+	DrawModels();
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, EnvironmentMapManager::GetEnvCubeMap());
 
 	ShaderDirectory::GetShader("cubemap").Use();
 	ShaderDirectory::GetShader("cubemap").SetMat4("view", view);
-
 	ShaderDirectory::GetShader("cubemap").SetInt("environmentMap", 0);
 
 	Object::Cube();
@@ -223,7 +219,7 @@ void Renderer::InitModels()
 {
 	//ModelDirectory::SetModel("mask", Model("../assets/pbr-kabuto-samurai-helmet/source/HelmetPresentationLightMap.fbx.fbx"));
 	//ModelDirectory::SetModel("gun", Model("../assets/Cerberus_by_Andrew_Maximov/Cerberus_by_Andrew_Maximov/Cerberus_LP.fbx"));
-	ModelDirectory::SetModel("backpack", Model("../assets/backpack/backpack.obj"));
+	//ModelDirectory::SetModel("backpack", Model("../assets/backpack/backpack.obj"));
 }
 
 glm::mat4 Renderer::GetModelMatrix()
@@ -304,6 +300,18 @@ void Renderer::DrawModel(std::string modelName, std::string shaderName)
 {
 	ModelDirectory::Directory[modelName].Draw(ShaderDirectory::GetShader(shaderName));
 }
+
+void Renderer::DrawModels() 
+{
+	for (auto modelKey = ModelDirectory::Directory.begin(); modelKey != ModelDirectory::Directory.end(); modelKey++)
+	{
+		std::string modelName = modelKey->first;
+		TextureDirectory::BindModelTextureMappings(modelName);
+		DrawModel(modelName, "pbrMaterial");
+	}
+}
+
+
 
 void Renderer::DrawLights()
 {

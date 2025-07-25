@@ -1,5 +1,7 @@
 #include "modelDirectory.h"
+#include "../textureDirectory/textureDirectory.h"
 #include <cstring>
+#include "../helpers/helpers.h"
 
 namespace ModelDirectory
 {
@@ -14,15 +16,16 @@ void ModelDirectory::SetModel(std::string modelName, Model model)
 void ModelDirectory::SetModelFromFile()
 {
 
-	const char* modelPath = FileDialog::getFile();
+	const char* stagedModelPath = FileDialog::getFile();
 
-	std::string modelName = strrchr(modelPath, '\\');
-	std::cout << modelName << '\n';
-	if (!modelPath)
+	std::string modelPath = stagedModelPath;
+	std::string modelTexturePath = getFolderPath(modelPath) + "\\Textures\\";
+
+	std::string modelName = strrchr(stagedModelPath, '\\');
+	if (!stagedModelPath)
 		std::cout << "ERROR | Model not found\n";
-	std::cout << modelPath << '\n';
 
-	Directory["model"] = Model(modelPath);
+	Directory[modelName] = Model(modelPath);
 
 }
 

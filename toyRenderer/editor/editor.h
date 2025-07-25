@@ -2,6 +2,8 @@
 #define EDITOR_H
 #include "imgui.h"
 #include "glm/glm.hpp"
+#define IM_MAX(A, B)            (((A) >= (B)) ? (A) : (B))
+#define IMGUI_DEMO_MARKER(section)  do { if (GImGuiDemoMarkerCallback != NULL) GImGuiDemoMarkerCallback(__FILE__, __LINE__, section, GImGuiDemoMarkerCallbackUserData); } while (0)
 
 namespace Editor
 {
@@ -22,6 +24,7 @@ namespace Editor
 	void StartFrame();
 	void RenderMainMenuBar();
 	void Config();
+	static void DemoWindowWidgetsImages();
 	void Terminate();
 
 	namespace {

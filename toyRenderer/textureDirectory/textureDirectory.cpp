@@ -183,6 +183,20 @@ void TextureDirectory::BindModelTextureMappings(std::string modelName)
 	);
 }
 
+void TextureDirectory::SetTextureFromFile()
+{
+	const char* texturePath = FileDialog::getFile();
+
+	std::string modelName = strrchr(texturePath, '\\');
+	std::cout << modelName << '\n';
+	if (!texturePath)
+		std::cout << "ERROR | Model not found\n";
+	std::cout << texturePath << '\n';
+
+	SetTexture(modelName, texturePath, false);
+
+}
+
 void TextureDirectory::SetHDRTextureFromFile()
 {
 	const char* texturePath = FileDialog::getFile();
@@ -206,4 +220,18 @@ void TextureDirectory::Unbind2DMaps()
 		glActiveTexture(GL_TEXTURE3 + i);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+}
+
+
+
+void TextureDirectory::SetTextureMaps(std::string modelName, std::string modelPath)
+{
+
+	//const char* folderPath = modelPath.c_str();
+
+	//TextureDirectory::SetTexture(modelName + "_base_map",  folderPath + , false);
+	//TextureDirectory::SetTexture(modelName + "_metallic_map", folderPath, false);
+	//TextureDirectory::SetTexture(modelName + "_normal_map", folderPath, false);
+	//TextureDirectory::SetTexture(modelName + "_roughness_map", folderPath, false);
+	//TextureDirectory::SetTexture(modelName + "_ao_map", folderPath, false);
 }

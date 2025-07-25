@@ -10,6 +10,8 @@ namespace TextureDirectory
 
 	extern std::map<std::string, unsigned int> Directory;
 	void SetTexture(std::string name, const char* path, bool gamma);
+	void SetTextureFromFile();
+	void SetTextureMaps(std::string modelName, std::string modelPath);
 	void SetLookupTexture(std::string name);
 	void SetHDRTexture(std::string name, const char* path);
 	unsigned int GetTexture(std::string name);
