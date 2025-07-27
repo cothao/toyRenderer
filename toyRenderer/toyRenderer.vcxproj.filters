@@ -185,6 +185,9 @@
     <ClInclude Include="environmentMapManager\environmentMapManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="helpers\helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assimp-vc140-mt.dll" />

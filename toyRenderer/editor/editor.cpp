@@ -3,7 +3,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "../modelDirectory/modelDirectory.h"
-#include "../textureDirectory/textureDirectory.h"
+//#include "../textureDirectory/textureDirectory.h"
 #include "../renderer/renderer.h"
 
 namespace Editor
@@ -19,7 +19,10 @@ namespace Editor
 
     bool show_demo_window = true;
     bool show_another_window = false;
+    bool show_image_display = false;
     ImVec4 clear_color = {};
+    extern std::string current_displayed_image = "";
+
     ImGuiIO* io = nullptr;
 
     namespace
@@ -93,7 +96,7 @@ void Editor::StartFrame()
             counter++;
         ImGui::SameLine();
         ImGui::Text("counter = %d", counter);
-
+        DemoWindowWidgetsImages();
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / (*io).Framerate, (*io).Framerate);
         ImGui::End();
     }
@@ -148,11 +151,15 @@ void Editor::Config()
     //IMGUI_DEMO_MARKER("Examples/Menu");
     ImGui::MenuItem("(demo menu)", NULL, false, false);
     if (ImGui::MenuItem("New")) {}
-    if (ImGui::MenuItem("Open", "Ctrl+O")) 
+    if (ImGui::MenuItem("Open texture", "Ctrl+O")) 
     {
         //ModelDirectory::SetModelFromFile();
         TextureDirectory::SetHDRTextureFromFile();
-
+    }
+    if (ImGui::MenuItem("Open model", "Ctrl+O"))
+    {
+        ModelDirectory::SetModelFromFile();
+        //TextureDirectory::SetHDRTextureFromFile();
     }
     if (ImGui::BeginMenu("Open Recent"))
     {
@@ -235,4 +242,103 @@ void Editor::Terminate()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+}
+
+static void Editor::DemoWindowWidgetsImages()
+{
+
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::TextWrapped(
+            "Below we are displaying the font texture (which is the only texture we have access to in this demo). "
+            "Use the 'ImTextureID' type as storage to pass pointers or identifier to your own texture data. "
+            "Hover the texture for a zoomed view!");
+
+        // Below we are displaying the font texture because it is the only texture we have access to inside the demo!
+        // Read description about ImTextureID/ImTextureRef and FAQ for details about texture identifiers.
+        // If you use one of the default imgui_impl_XXXX.cpp rendering backend, they all have comments at the top
+        // of their respective source file to specify what they are using as texture identifier, for example:
+        // - The imgui_impl_dx11.cpp renderer expect a 'ID3D11ShaderResourceView*' pointer.
+        // - The imgui_impl_opengl3.cpp renderer expect a GLuint OpenGL texture identifier, etc.
+        // So with the DirectX11 backend, you call ImGui::Image() with a 'ID3D11ShaderResourceView*' cast to ImTextureID.
+        // - If you decided that ImTextureID = MyEngineTexture*, then you can pass your MyEngineTexture* pointers
+        //   to ImGui::Image(), and gather width/height through your own functions, etc.
+        // - You can use ShowMetricsWindow() to inspect the draw data that are being passed to your renderer,
+        //   it will help you debug issues if you are confused about it.
+        // - Consider using the lower-level ImDrawList::AddImage() API, via ImGui::GetWindowDrawList()->AddImage().
+        // - Read https://github.com/ocornut/imgui/blob/master/docs/FAQ.md
+        // - Read https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
+
+        // Grab the current texture identifier used by the font atlas.
+        //ImTextureRef my_tex_id = io.Fonts->TexRef;
+
+
+        // Regular user code should never have to care about TexData-> fields, but since we want to display the entire texture here, we pull Width/Height from it.
+        float my_tex_w = (float)io.Fonts->TexData->Width;
+        float my_tex_h = (float)io.Fonts->TexData->Height;
+
+        ImGui::TextWrapped("And now some textured buttons..");
+        int textureId = 0;
+
+        for (auto textureKey = TextureDirectory::TextureMappings.begin(); textureKey != TextureDirectory::TextureMappings.end(); textureKey++)
+        {
+
+			TextureMapping textureMapping = textureKey->second;
+            //if (textureKey->second)	    std::cout << "Texture Key: " << textureKey->first << std::endl;
+            //std::cout << textureKey->second << "\n";
+            ImTextureID my_tex_id = TextureDirectory::TextureMappings[textureKey->first].id;
+            // UV coordinates are often (0.0f, 0.0f) and (1.0f, 1.0f) to display an entire textures.
+            // Here are trying to display only a 32x32 pixels area of the texture, hence the UV computation.
+            // Read about UV coordinates here: https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
+            ImGui::PushID(textureId);
+
+            if (textureId > 0)
+                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(textureId - 1.0f, textureId - 1.0f));
+            ImVec2 size = ImVec2(32.0f, 32.0f);                         // Size of the image we want to make visible
+            ImVec2 uv0 = ImVec2(0.0f, 0.0f);                            // UV coordinates for lower-left
+            ImVec2 uv1 = ImVec2(32.0f / my_tex_w, 32.0f / my_tex_h);    // UV coordinates for (32,32) in our texture
+            ImVec4 bg_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);             // Black background
+            ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);           // No tint
+
+            if (ImGui::ImageButton("", my_tex_id, size, uv0, uv1, bg_col, tint_col))
+            {
+				current_displayed_image = textureKey->first;
+                show_image_display = !show_image_display;
+            }
+
+            ImGui::Text(textureMapping.name.c_str());
+
+            ImageDisplay(TextureDirectory::TextureMappings[textureKey->first]);
+
+            if (ImGui::Button("Insert"))
+            {
+				TextureDirectory::TextureMappings[textureKey->first].SetTextureMapping();
+            }
+
+            if (textureId > 0)
+                ImGui::PopStyleVar();
+            ImGui::PopID();
+            //ImGui::SameLine();
+            textureId++;
+        }
+        ImGui::NewLine();
+}
+
+void Editor::ImageDisplay(TextureMapping texture)
+{
+
+    if (show_image_display && texture.name == current_displayed_image)
+    {
+
+        const char* textureName = texture.name.c_str();
+        
+        ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        
+        ImGui::Text(textureName);
+
+        ImGui::Image(texture.id, ImVec2(512.f, 512.f), ImVec2(0., 0.), ImVec2(1., 1.));
+
+        if (ImGui::Button("Close Me"))
+            show_image_display = !show_image_display;
+        ImGui::End();
+    }
 }

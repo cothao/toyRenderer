@@ -178,6 +178,7 @@
     <ClInclude Include="environmentMapManager\environmentMapManager.h" />
     <ClInclude Include="fileDialog\fileDialog.h" />
     <ClInclude Include="framebufferManager\framebufferManager.h" />
+    <ClInclude Include="helpers\helpers.h" />
     <ClInclude Include="input\input.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
