@@ -306,7 +306,7 @@ void Renderer::DrawModels()
 	for (auto modelKey = ModelDirectory::Directory.begin(); modelKey != ModelDirectory::Directory.end(); modelKey++)
 	{
 		std::string modelName = modelKey->first;
-		TextureDirectory::BindModelTextureMappings(modelName);
+		TextureDirectory::BindModelTextureMappings();
 		DrawModel(modelName, "pbrMaterial");
 	}
 }

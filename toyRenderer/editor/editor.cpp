@@ -3,7 +3,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "../modelDirectory/modelDirectory.h"
-#include "../textureDirectory/textureDirectory.h"
+//#include "../textureDirectory/textureDirectory.h"
 #include "../renderer/renderer.h"
 
 namespace Editor
@@ -19,7 +19,10 @@ namespace Editor
 
     bool show_demo_window = true;
     bool show_another_window = false;
+    bool show_image_display = false;
     ImVec4 clear_color = {};
+    extern std::string current_displayed_image = "";
+
     ImGuiIO* io = nullptr;
 
     namespace
@@ -268,37 +271,74 @@ static void Editor::DemoWindowWidgetsImages()
         // Grab the current texture identifier used by the font atlas.
         //ImTextureRef my_tex_id = io.Fonts->TexRef;
 
-        ImTextureID my_tex_id = 0;
 
         // Regular user code should never have to care about TexData-> fields, but since we want to display the entire texture here, we pull Width/Height from it.
         float my_tex_w = (float)io.Fonts->TexData->Width;
         float my_tex_h = (float)io.Fonts->TexData->Height;
 
         ImGui::TextWrapped("And now some textured buttons..");
-        static int pressed_count = 0;
-        for (int i = 0; i < 8; i++)
+        int textureId = 0;
+
+        for (auto textureKey = TextureDirectory::TextureMappings.begin(); textureKey != TextureDirectory::TextureMappings.end(); textureKey++)
         {
+
+			TextureMapping textureMapping = textureKey->second;
+            //if (textureKey->second)	    std::cout << "Texture Key: " << textureKey->first << std::endl;
+            //std::cout << textureKey->second << "\n";
+            ImTextureID my_tex_id = TextureDirectory::TextureMappings[textureKey->first].id;
             // UV coordinates are often (0.0f, 0.0f) and (1.0f, 1.0f) to display an entire textures.
             // Here are trying to display only a 32x32 pixels area of the texture, hence the UV computation.
             // Read about UV coordinates here: https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
-            ImGui::PushID(i);
-            if (i > 0)
-                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(i - 1.0f, i - 1.0f));
+            ImGui::PushID(textureId);
+
+            if (textureId > 0)
+                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(textureId - 1.0f, textureId - 1.0f));
             ImVec2 size = ImVec2(32.0f, 32.0f);                         // Size of the image we want to make visible
             ImVec2 uv0 = ImVec2(0.0f, 0.0f);                            // UV coordinates for lower-left
             ImVec2 uv1 = ImVec2(32.0f / my_tex_w, 32.0f / my_tex_h);    // UV coordinates for (32,32) in our texture
             ImVec4 bg_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);             // Black background
             ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);           // No tint
+
             if (ImGui::ImageButton("", my_tex_id, size, uv0, uv1, bg_col, tint_col))
             {
-                pressed_count += 1;
-                TextureDirectory::SetTextureFromFile();
+				current_displayed_image = textureKey->first;
+                show_image_display = !show_image_display;
             }
-            if (i > 0)
+
+            ImGui::Text(textureMapping.name.c_str());
+
+            ImageDisplay(TextureDirectory::TextureMappings[textureKey->first]);
+
+            if (ImGui::Button("Insert"))
+            {
+				TextureDirectory::TextureMappings[textureKey->first].SetTextureMapping();
+            }
+
+            if (textureId > 0)
                 ImGui::PopStyleVar();
             ImGui::PopID();
-            ImGui::SameLine();
+            //ImGui::SameLine();
+            textureId++;
         }
         ImGui::NewLine();
-        ImGui::Text("Pressed %d times.", pressed_count);
+}
+
+void Editor::ImageDisplay(TextureMapping texture)
+{
+
+    if (show_image_display && texture.name == current_displayed_image)
+    {
+
+        const char* textureName = texture.name.c_str();
+        
+        ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        
+        ImGui::Text(textureName);
+
+        ImGui::Image(texture.id, ImVec2(512.f, 512.f), ImVec2(0., 0.), ImVec2(1., 1.));
+
+        if (ImGui::Button("Close Me"))
+            show_image_display = !show_image_display;
+        ImGui::End();
+    }
 }

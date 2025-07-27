@@ -3,9 +3,20 @@
 #include <iostream>
 #include "../renderer/renderer.h"
 
+TextureMapping::TextureMapping(std::string name, unsigned int id, void (*textureMapper)())
+	: name(name), id(id), SetTextureMapping(textureMapper)
+{}
+
 namespace TextureDirectory
 {
 	extern std::map<std::string, unsigned int> Directory = {};
+	extern std::map<std::string, TextureMapping> TextureMappings = { 
+		{"metallic_map", TextureMapping("metallic_map", (unsigned int)0, SetMetallicTexture)},
+		{"normal_map", TextureMapping("normal_map", (unsigned int)0, SetNormalTexture)},
+		{"roughness_map", TextureMapping("roughness_map", (unsigned int)0, SetRoughnessTexture)},
+		{"ao_map", TextureMapping("ao_map", (unsigned int)0, SetAOTexture)},
+		{"base_map", TextureMapping("base_map", (unsigned int)0, SetBaseTexture)}
+	};
 }
 
 void TextureDirectory::SetTexture(std::string name, const char * path, bool gamma)
@@ -28,6 +39,11 @@ void TextureDirectory::SetHDRTexture(std::string name, const char* path)
 unsigned int TextureDirectory::GetTexture(std::string name)
 {
 	return Directory[name];
+}
+
+unsigned int TextureDirectory::GetTextureMapping(std::string name)
+{
+	return TextureMappings[name].id;
 }
 
 unsigned int TextureDirectory::LoadTexture(const char * path, bool gamma)
@@ -172,14 +188,14 @@ void TextureDirectory::BindMapTextures(unsigned int base, unsigned int metallic,
 
 }
 
-void TextureDirectory::BindModelTextureMappings(std::string modelName)
+void TextureDirectory::BindModelTextureMappings()
 {
 	BindMapTextures(
-		GetTexture(modelName + "_base_map"),
-		GetTexture(modelName + "_metallic_map"),
-		GetTexture(modelName + "_normal_map"),
-		GetTexture(modelName + "_roughness_map"),
-		GetTexture(modelName + "_ao_map")
+		GetTextureMapping("base_map"),
+		GetTextureMapping("metallic_map"),
+		GetTextureMapping("normal_map"),
+		GetTextureMapping("roughness_map"),
+		GetTextureMapping("ao_map")
 	);
 }
 
@@ -222,16 +238,72 @@ void TextureDirectory::Unbind2DMaps()
 	}
 }
 
-
-
-void TextureDirectory::SetTextureMaps(std::string modelName, std::string modelPath)
+void TextureDirectory::SetBaseTexture()
 {
+	const char* texturePath = FileDialog::getFile();
 
-	//const char* folderPath = modelPath.c_str();
+	std::string modelName = strrchr(texturePath, '\\');
+	std::cout << modelName << '\n';
+	if (!texturePath)
+		std::cout << "ERROR | Model not found\n";
+	std::cout << texturePath << '\n';
 
-	//TextureDirectory::SetTexture(modelName + "_base_map",  folderPath + , false);
-	//TextureDirectory::SetTexture(modelName + "_metallic_map", folderPath, false);
-	//TextureDirectory::SetTexture(modelName + "_normal_map", folderPath, false);
-	//TextureDirectory::SetTexture(modelName + "_roughness_map", folderPath, false);
-	//TextureDirectory::SetTexture(modelName + "_ao_map", folderPath, false);
+	TextureMappings["base_map"].id = LoadTexture(texturePath, false);
+	
+}
+
+void TextureDirectory::SetMetallicTexture()
+{
+	const char* texturePath = FileDialog::getFile();
+
+	std::string modelName = strrchr(texturePath, '\\');
+	std::cout << modelName << '\n';
+	if (!texturePath)
+		std::cout << "ERROR | Model not found\n";
+
+	TextureMappings["metallic_map"].id = LoadTexture(texturePath, false);
+	std::cout << "Id: " << TextureMappings["metallic_map"].id << '\n';
+
+}
+
+void TextureDirectory::SetNormalTexture()
+{
+	const char* texturePath = FileDialog::getFile();
+
+	std::string modelName = strrchr(texturePath, '\\');
+	std::cout << modelName << '\n';
+	if (!texturePath)
+		std::cout << "ERROR | Model not found\n";
+	std::cout << texturePath << '\n';
+
+	TextureMappings["normal_map"].id = LoadTexture(texturePath, false);
+
+}
+
+void TextureDirectory::SetRoughnessTexture()
+{
+	const char* texturePath = FileDialog::getFile();
+
+	std::string modelName = strrchr(texturePath, '\\');
+	std::cout << modelName << '\n';
+	if (!texturePath)
+		std::cout << "ERROR | Model not found\n";
+	std::cout << texturePath << '\n';
+
+	TextureMappings["roughness_map"].id = LoadTexture(texturePath, false);
+
+}
+
+void TextureDirectory::SetAOTexture()
+{
+	const char* texturePath = FileDialog::getFile();
+
+	std::string modelName = strrchr(texturePath, '\\');
+	std::cout << modelName << '\n';
+	if (!texturePath)
+		std::cout << "ERROR | Model not found\n";
+	std::cout << texturePath << '\n';
+
+	TextureMappings["ao_map"].id = LoadTexture(texturePath, false);
+
 }

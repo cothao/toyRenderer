@@ -2,6 +2,8 @@
 #define EDITOR_H
 #include "imgui.h"
 #include "glm/glm.hpp"
+#include "../textureDirectory/textureDirectory.h"
+#include <string>
 #define IM_MAX(A, B)            (((A) >= (B)) ? (A) : (B))
 #define IMGUI_DEMO_MARKER(section)  do { if (GImGuiDemoMarkerCallback != NULL) GImGuiDemoMarkerCallback(__FILE__, __LINE__, section, GImGuiDemoMarkerCallbackUserData); } while (0)
 
@@ -17,6 +19,8 @@ namespace Editor
 
 	extern bool show_demo_window;
 	extern bool show_another_window;
+	extern bool show_image_display;
+	extern std::string current_displayed_image;
 	extern ImVec4 clear_color;
 	extern ImGuiIO* io;
 	extern float * roughness;
@@ -24,6 +28,7 @@ namespace Editor
 	void StartFrame();
 	void RenderMainMenuBar();
 	void Config();
+	void ImageDisplay(TextureMapping texture);
 	static void DemoWindowWidgetsImages();
 	void Terminate();
 
