@@ -282,10 +282,12 @@ static void Editor::DemoWindowWidgetsImages()
         for (auto textureKey = TextureDirectory::TextureMappings.begin(); textureKey != TextureDirectory::TextureMappings.end(); textureKey++)
         {
 
-			TextureMapping textureMapping = textureKey->second;
-            //if (textureKey->second)	    std::cout << "Texture Key: " << textureKey->first << std::endl;
+            std::string     textureName = textureName;
+			TextureMapping  textureMapping = textureKey->second;
+
+            //if (textureKey->second)	    std::cout << "Texture Key: " << textureName << std::endl;
             //std::cout << textureKey->second << "\n";
-            ImTextureID my_tex_id = TextureDirectory::TextureMappings[textureKey->first].id;
+            ImTextureID     my_tex_id = TextureDirectory::TextureMappings[textureName].id;
             // UV coordinates are often (0.0f, 0.0f) and (1.0f, 1.0f) to display an entire textures.
             // Here are trying to display only a 32x32 pixels area of the texture, hence the UV computation.
             // Read about UV coordinates here: https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
@@ -301,17 +303,17 @@ static void Editor::DemoWindowWidgetsImages()
 
             if (ImGui::ImageButton("", my_tex_id, size, uv0, uv1, bg_col, tint_col))
             {
-				current_displayed_image = textureKey->first;
+				current_displayed_image = textureName;
                 show_image_display = !show_image_display;
             }
 
             ImGui::Text(textureMapping.name.c_str());
 
-            ImageDisplay(TextureDirectory::TextureMappings[textureKey->first]);
+            ImageDisplay(TextureDirectory::TextureMappings[textureName]);
 
             if (ImGui::Button("Insert"))
             {
-				TextureDirectory::TextureMappings[textureKey->first].SetTextureMapping(textureKey->first);
+				TextureDirectory::TextureMappings[textureName].SetTextureMapping(textureName);
             }
 
             if (textureId > 0)

@@ -1,21 +1,2 @@
-﻿  editor.cpp
-C:\Users\colli\source\repos\toyRenderer\toyRenderer\input\input.h(17,3): warning C4091: 'extern ': ignored on left of 'Input::InputTypes' when no variable is declared
-  (compiling source file 'editor/editor.cpp')
-  
-  main.cpp
-C:\Users\colli\source\repos\toyRenderer\toyRenderer\input\input.h(17,3): warning C4091: 'extern ': ignored on left of 'Input::InputTypes' when no variable is declared
-  (compiling source file 'main.cpp')
-  
-C:\Users\colli\source\repos\toyRenderer\toyRenderer\main.cpp(43,17): warning C4551: function call missing argument list
-C:\Users\colli\source\repos\toyRenderer\toyRenderer\main.cpp(48,28): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  modelDirectory.cpp
-  renderer.cpp
-C:\Users\colli\source\repos\toyRenderer\toyRenderer\input\input.h(17,3): warning C4091: 'extern ': ignored on left of 'Input::InputTypes' when no variable is declared
-  (compiling source file 'renderer/renderer.cpp')
-  
-  textureDirectory.cpp
-C:\Users\colli\source\repos\toyRenderer\toyRenderer\input\input.h(17,3): warning C4091: 'extern ': ignored on left of 'Input::InputTypes' when no variable is declared
-  (compiling source file 'textureDirectory/textureDirectory.cpp')
-  
-  Generating Code...
+﻿  modelDirectory.cpp
   toyRenderer.vcxproj -> C:\Users\colli\source\repos\toyRenderer\x64\Debug\toyRenderer.exe
