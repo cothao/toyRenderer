@@ -3,7 +3,7 @@
 #include <iostream>
 #include "../renderer/renderer.h"
 
-TextureMapping::TextureMapping(std::string name, unsigned int id, void (*textureMapper)())
+TextureMapping::TextureMapping(std::string name, unsigned int id, void (*textureMapper)(std::string))
 	: name(name), id(id), SetTextureMapping(textureMapper)
 {}
 
@@ -11,11 +11,11 @@ namespace TextureDirectory
 {
 	extern std::map<std::string, unsigned int> Directory = {};
 	extern std::map<std::string, TextureMapping> TextureMappings = { 
-		{"metallic_map", TextureMapping("metallic_map", (unsigned int)0, SetMetallicTexture)},
-		{"normal_map", TextureMapping("normal_map", (unsigned int)0, SetNormalTexture)},
-		{"roughness_map", TextureMapping("roughness_map", (unsigned int)0, SetRoughnessTexture)},
-		{"ao_map", TextureMapping("ao_map", (unsigned int)0, SetAOTexture)},
-		{"base_map", TextureMapping("base_map", (unsigned int)0, SetBaseTexture)}
+		{"metallic_map", TextureMapping("metallic_map", (unsigned int)0, SetTextureMapping)},
+		{"normal_map", TextureMapping("normal_map", (unsigned int)0, SetTextureMapping)},
+		{"roughness_map", TextureMapping("roughness_map", (unsigned int)0, SetTextureMapping)},
+		{"ao_map", TextureMapping("ao_map", (unsigned int)0, SetTextureMapping)},
+		{"base_map", TextureMapping("base_map", (unsigned int)0, SetTextureMapping)}
 	};
 }
 
@@ -238,72 +238,16 @@ void TextureDirectory::Unbind2DMaps()
 	}
 }
 
-void TextureDirectory::SetBaseTexture()
+void TextureDirectory::SetTextureMapping(std::string textureType)
 {
 	const char* texturePath = FileDialog::getFile();
 
-	std::string modelName = strrchr(texturePath, '\\');
-	std::cout << modelName << '\n';
 	if (!texturePath)
-		std::cout << "ERROR | Model not found\n";
-	std::cout << texturePath << '\n';
-
-	TextureMappings["base_map"].id = LoadTexture(texturePath, false);
-	
-}
-
-void TextureDirectory::SetMetallicTexture()
-{
-	const char* texturePath = FileDialog::getFile();
-
-	std::string modelName = strrchr(texturePath, '\\');
-	std::cout << modelName << '\n';
-	if (!texturePath)
-		std::cout << "ERROR | Model not found\n";
-
-	TextureMappings["metallic_map"].id = LoadTexture(texturePath, false);
-	std::cout << "Id: " << TextureMappings["metallic_map"].id << '\n';
-
-}
-
-void TextureDirectory::SetNormalTexture()
-{
-	const char* texturePath = FileDialog::getFile();
-
-	std::string modelName = strrchr(texturePath, '\\');
-	std::cout << modelName << '\n';
-	if (!texturePath)
-		std::cout << "ERROR | Model not found\n";
-	std::cout << texturePath << '\n';
-
-	TextureMappings["normal_map"].id = LoadTexture(texturePath, false);
-
-}
-
-void TextureDirectory::SetRoughnessTexture()
-{
-	const char* texturePath = FileDialog::getFile();
-
-	std::string modelName = strrchr(texturePath, '\\');
-	std::cout << modelName << '\n';
-	if (!texturePath)
-		std::cout << "ERROR | Model not found\n";
-	std::cout << texturePath << '\n';
-
-	TextureMappings["roughness_map"].id = LoadTexture(texturePath, false);
-
-}
-
-void TextureDirectory::SetAOTexture()
-{
-	const char* texturePath = FileDialog::getFile();
-
-	std::string modelName = strrchr(texturePath, '\\');
-	std::cout << modelName << '\n';
-	if (!texturePath)
-		std::cout << "ERROR | Model not found\n";
-	std::cout << texturePath << '\n';
-
-	TextureMappings["ao_map"].id = LoadTexture(texturePath, false);
-
+	{
+		std::cout << "ERROR | AO Texture not found\n";
+	}
+	else
+	{
+		TextureMappings[textureType].id = LoadTexture(texturePath, false);
+	}
 }

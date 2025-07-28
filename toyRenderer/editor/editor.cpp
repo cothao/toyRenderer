@@ -311,7 +311,7 @@ static void Editor::DemoWindowWidgetsImages()
 
             if (ImGui::Button("Insert"))
             {
-				TextureDirectory::TextureMappings[textureKey->first].SetTextureMapping();
+				TextureDirectory::TextureMappings[textureKey->first].SetTextureMapping(textureKey->first);
             }
 
             if (textureId > 0)
