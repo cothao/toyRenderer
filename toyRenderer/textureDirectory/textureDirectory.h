@@ -8,11 +8,11 @@
 class TextureMapping
 {
 	public:
-		TextureMapping(std::string name = "", unsigned int id = 0, void (*textureMapper)() = nullptr);
+		TextureMapping(std::string name = "", unsigned int id = 0, void (*textureMapper)(std::string) = nullptr);
 		//~TextureMapping();
 		std::string name = "";
 		unsigned int id = 0;
-		void (*SetTextureMapping)() = nullptr;
+		void (*SetTextureMapping)(std::string) = nullptr;
 
 };
 
@@ -28,6 +28,7 @@ namespace TextureDirectory
 	void SetNormalTexture();
 	void SetRoughnessTexture();
 	void SetAOTexture();
+	void SetTextureMapping(std::string textureType);
 	void SetLookupTexture(std::string name);
 	void SetHDRTexture(std::string name, const char* path);
 	unsigned int GetTexture(std::string name);

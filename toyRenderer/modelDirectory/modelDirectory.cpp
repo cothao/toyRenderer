@@ -18,14 +18,18 @@ void ModelDirectory::SetModelFromFile()
 
 	const char* stagedModelPath = FileDialog::getFile();
 
-	std::string modelPath = stagedModelPath;
-	std::string modelTexturePath = getFolderPath(modelPath) + "\\Textures\\";
 
-	std::string modelName = strrchr(stagedModelPath, '\\');
+
 	if (!stagedModelPath)
+	{
 		std::cout << "ERROR | Model not found\n";
-
-	Directory[modelName] = Model(modelPath);
+	}
+	else
+	{
+		std::string modelPath = stagedModelPath;
+		std::string modelName = strrchr(stagedModelPath, '\\');
+		Directory[modelName] = Model(modelPath);
+	}
 
 }
 
