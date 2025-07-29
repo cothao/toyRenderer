@@ -23,11 +23,6 @@ namespace TextureDirectory
 	extern std::map<std::string, TextureMapping> TextureMappings;
 	void SetTexture(std::string name, const char* path, bool gamma);
 	void SetTextureFromFile();
-	void SetBaseTexture();
-	void SetMetallicTexture();
-	void SetNormalTexture();
-	void SetRoughnessTexture();
-	void SetAOTexture();
 	void SetTextureMapping(std::string textureType);
 	void SetLookupTexture(std::string name);
 	void SetHDRTexture(std::string name, const char* path);
@@ -36,6 +31,7 @@ namespace TextureDirectory
 	unsigned int LoadTexture(const char * path, bool gamma);
 	unsigned int LoadHDRTexture(const char * path);
 	unsigned int LoadLookupTexture();
+	void LoadDepthTexture();
 	void BindPBRTextures(unsigned int irradianceMap, unsigned int prefilterMap);
 	void BindModelTextureMappings();
 	void BindMapTextures(unsigned int base, unsigned int metallic, unsigned int normal, unsigned int roughness, unsigned int ao);

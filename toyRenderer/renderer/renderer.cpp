@@ -42,6 +42,7 @@ void Renderer::Init()
 	glDepthFunc(GL_LEQUAL);
 
 	FramebufferManager::SetFBO("capture");
+	FramebufferManager::SetFBO("depthMap");
 
 	TextureDirectory::SetTexture("rusted_metal_base_map", "../images/rusted_metal/rustediron2_basecolor.png", true);
 	TextureDirectory::SetTexture("rusted_metal_metallic_map", "../images/rusted_metal/rustediron2_metallic.png", true);
@@ -179,7 +180,7 @@ void Renderer::RenderScene()
 
 	model = glm::mat4(1.f);
 	model = glm::translate(model, glm::vec3(3.f, 0.f, 5.f));
-	model = glm::scale(model, glm::vec3(0.1f, .1f, .1f));
+	model = glm::scale(model, glm::vec3(10.1f, 10.1f, 10.1f));
 	model = glm::rotate(model, glm::radians(-90.f), glm::vec3(1.f, 0.f, 0.f));
 	ShaderDirectory::GetShader("pbrMaterial").SetMat4("model", model);
 	ShaderDirectory::GetShader("pbrMaterial").SetMat4("view", view);

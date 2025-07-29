@@ -15,6 +15,29 @@ Buffer FramebufferManager::GetFBO(std::string name)
 	return Directory[name];
 }
 
+void FramebufferManager::SetDepthMapFBO(unsigned int depthMap)
+{
+
+	if (Directory.find("depthMap") != Directory.end())
+	{
+		return; // FBO already exists
+	}
+
+	unsigned int FBO;
+	unsigned int RBO;
+	glGenFramebuffers(1, &FBO);
+	glGenRenderbuffers(1, &RBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	Directory["depthMap"] = Buffer(FBO, RBO);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+}
+
 void FramebufferManager::SetFBO(std::string name)
 {
 	if (Directory.find(name) != Directory.end())

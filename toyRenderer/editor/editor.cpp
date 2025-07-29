@@ -282,7 +282,7 @@ static void Editor::DemoWindowWidgetsImages()
         for (auto textureKey = TextureDirectory::TextureMappings.begin(); textureKey != TextureDirectory::TextureMappings.end(); textureKey++)
         {
 
-            std::string     textureName = textureName;
+            std::string     textureName = textureKey->first;
 			TextureMapping  textureMapping = textureKey->second;
 
             //if (textureKey->second)	    std::cout << "Texture Key: " << textureName << std::endl;
