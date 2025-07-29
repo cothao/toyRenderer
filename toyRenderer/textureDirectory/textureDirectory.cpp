@@ -102,6 +102,27 @@ unsigned int TextureDirectory::LoadTexture(const char * path, bool gamma)
 
 }
 
+void TextureDirectory::LoadDepthTexture()
+{
+
+	unsigned int textureID;
+
+	glGenTextures(1, &textureID);
+
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		TextureDirectory::Directory["depthMap"] = textureID;
+
+}
+
 
 unsigned int TextureDirectory::LoadHDRTexture(const char* path)
 {
