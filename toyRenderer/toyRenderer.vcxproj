@@ -212,6 +212,10 @@
     <None Include="shaders\convolutionShader.frag" />
     <None Include="shaders\cubemap.frag" />
     <None Include="shaders\cubemap.vert" />
+    <None Include="shaders\depthQuad.frag" />
+    <None Include="shaders\depthQuad.vert" />
+    <None Include="shaders\depthShader.frag" />
+    <None Include="shaders\depthShader.vert" />
     <None Include="shaders\equirectangular.frag" />
     <None Include="shaders\equirectangular.vert" />
     <None Include="shaders\light.frag" />

@@ -15,6 +15,9 @@ namespace Renderer
 	extern glm::mat4 model;
 	extern glm::mat4 view;
 	extern glm::mat4 projection;
+	extern glm::mat4 lightProjection;
+	extern glm::mat4 lightView;
+	extern glm::mat4 lightSpaceMatrix;
 	extern glm::vec3 cameraPos;
 	extern glm::vec4 albedo;
 	extern int nrRows;

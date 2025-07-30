@@ -13,11 +13,14 @@ namespace Object
 	extern unsigned int cubeVBO;
 	extern unsigned int quadVAO;
 	extern unsigned int quadVBO;
+	extern unsigned int planeVBO;
+	extern unsigned int planeVAO;
 	extern unsigned int indexCount;
 
 	void Sphere();
 	void Cube();
 	void Quad();
+	void Plane();
 
 }
 
