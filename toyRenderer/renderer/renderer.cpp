@@ -10,7 +10,8 @@ namespace Renderer
 	extern glm::mat4 view = glm::mat4(1.);
 	extern glm::mat4 projection = glm::mat4(1.);
 	extern glm::mat4 lightProjection = glm::mat4(1.);
-	extern glm::mat4 lightView = glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f),
+	extern glm::vec3 lightPos = glm::vec3(-20., 10.f, 0.f);
+	extern glm::mat4 lightView = glm::lookAt(lightPos,
 		glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f));
 	extern glm::mat4 lightSpaceMatrix = glm::mat4(1.);
@@ -23,9 +24,15 @@ namespace Renderer
 	extern unsigned int brdfLUTTexture = 0;
 	extern std::string currentHDRTexture = "loft";
 	extern std::string lastHDRTexture = currentHDRTexture;
+	extern int SHADOW_WIDTH = 1024;
+	extern int SHADOW_HEIGHT = 1024;
+	float aspect = (float)SHADOW_WIDTH / (float)SHADOW_HEIGHT;
+	float near = 1.0f;
+	float far = 25.0f;
+	glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), aspect, near, far);
 
 	extern glm::vec3 lightPositions[] = {
-	glm::vec3(-10.0f,  10.0f, 10.0f),
+	glm::vec3(-20.0f,  10.0f, 0.0f),
 	glm::vec3(10.0f,  10.0f, 10.0f),
 	glm::vec3(-10.0f, -10.0f, 10.0f),
 	glm::vec3(10.0f, -10.0f, 10.0f),
@@ -37,6 +44,9 @@ namespace Renderer
 		glm::vec3(300.0f, 300.0f, 300.0f),
 		glm::vec3(300.0f, 300.0f, 300.0f)
 	};
+
+	extern std::vector<glm::mat4> shadowTransforms = {};
+
 }
 
 void Renderer::Init()
@@ -44,20 +54,41 @@ void Renderer::Init()
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-	//glDepthFunc(GL_LEQUAL);
+	glDepthFunc(GL_LEQUAL);
 
-	lightProjection = glm::ortho(-10., 10., -10., 10., 1., 7.5);
-
-	lightSpaceMatrix = lightProjection * lightView;
+	shadowTransforms.push_back(shadowProj *
+	glm::lookAt(lightPos, lightPos + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+shadowTransforms.push_back(shadowProj *
+	glm::lookAt(lightPos, lightPos + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+shadowTransforms.push_back(shadowProj *
+	glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
+shadowTransforms.push_back(shadowProj *
+	glm::lookAt(lightPos, lightPos + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)));
+shadowTransforms.push_back(shadowProj *
+	glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)));
+shadowTransforms.push_back(shadowProj *
+	glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));
 
 	FramebufferManager::SetFBO("capture");
 
-	TextureDirectory::LoadDepthTexture();
+	TextureDirectory::LoadCubeMapDepthTexture();
 
 	FramebufferManager::SetDepthMapFBO(TextureDirectory::GetTexture("depthMap"));
 
+	TextureDirectory::SetTexture("rusted_metal_base_map", "../images/rusted_metal/rustediron2_basecolor.png", true);
+	TextureDirectory::SetTexture("rusted_metal_metallic_map", "../images/rusted_metal/rustediron2_metallic.png", true);
+	TextureDirectory::SetTexture("rusted_metal_normal_map", "../images/rusted_metal/rustediron2_normal.png", true);
+	TextureDirectory::SetTexture("rusted_metal_roughness_map", "../images/rusted_metal/rustediron2_roughness.png", true);
+	TextureDirectory::SetTexture("rusted_metal_ao_map", "../images/rusted_metal/rustediron2_roughness.png", true);
+
 	TextureDirectory::SetLookupTexture("brdfLUTTexture");
-	
+
+	TextureDirectory::SetTexture("floor", "../images/wood.png", false);
+	TextureDirectory::SetTexture("brick_base_map", "../images/brickwall/brickwall.jpg", false);
+	TextureDirectory::SetTexture("brick_normal_map", "../images/brickwall/brickwall_normal.jpg", false);
+	TextureDirectory::SetTexture("brick_orange_base_map", "../images/bricks/bricks2.jpg", false);
+	TextureDirectory::SetTexture("brick_orange_normal_map", "../images/bricks/bricks2_normal.jpg", false);
+
 	TextureDirectory::SetHDRTexture("photo_studio", "../images/hdr/photo_studio_loft_hall_4k.hdr");
 	TextureDirectory::SetHDRTexture("field", "../images/hdr/horn-koppe_spring_4k.hdr");
 	TextureDirectory::SetHDRTexture("loft", "../images/hdr/newport_loft.hdr");
@@ -92,6 +123,17 @@ void Renderer::Init()
 	ShaderDirectory::GetShader("equirectangular").SetInt("equirectangularMap", 0);
 	ShaderDirectory::GetShader("equirectangular").SetMat4("projection", projection);
 	ShaderDirectory::GetShader("equirectangular").SetMat4("view", view);
+
+	ShaderDirectory::GetShader("shadow").Use();
+	ShaderDirectory::GetShader("shadow").SetInt("irradianceMap", 0);
+	ShaderDirectory::GetShader("shadow").SetInt("prefilterMap", 1);
+	ShaderDirectory::GetShader("shadow").SetInt("brdfLUT", 2);
+	ShaderDirectory::GetShader("shadow").SetInt("base_map", 3);
+	ShaderDirectory::GetShader("shadow").SetInt("metallic_map", 4);
+	ShaderDirectory::GetShader("shadow").SetInt("normal_map", 5);
+	ShaderDirectory::GetShader("shadow").SetInt("roughness_map", 6);
+	ShaderDirectory::GetShader("shadow").SetInt("aoMap", 7);
+	ShaderDirectory::GetShader("shadow").SetInt("depthMap", 8);
 
 	EnvironmentMapManager::SetEnvCubeMap();
 
@@ -141,25 +183,38 @@ void Renderer::RenderScene()
 	ClearColor(glm::vec4(.1f, .1f, .1f, 1.f));
 	ClearBuffers();
 
-	//ChangeHDRState();
+	ChangeHDRState();
 
-	//TextureDirectory::BindPBRTextures(EnvironmentMapManager::GetIrradianceMap(), EnvironmentMapManager::GetPrefilterMap());
+	//TextureDirectory::BindMapTextures(
+	//	TextureDirectory::GetTexture("rusted_metal_base_map"),
+	//	TextureDirectory::GetTexture("rusted_metal_metallic_map"),
+	//	TextureDirectory::GetTexture("rusted_metal_normal_map"),
+	//	TextureDirectory::GetTexture("rusted_metal_roughness_map"),
+	//	TextureDirectory::GetTexture("rusted_metal_ao_map")
+	//);
 
-	lightView = view;
-	lightProjection = glm::ortho(-10.f, 10.f, -10.f, 10.f, 1.f, 7.5f);
-	//lightView = glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f),
-	//	glm::vec3(0.0f, 0.0f, 0.0f),
-	//	glm::vec3(0.0f, 1.0f, 0.0f));
-	lightSpaceMatrix = lightProjection * lightView;
+	//lightPos = glm::vec3(-20 - cos(glfwGetTime()) * 5., 10.f, sin(glfwGetTime()));
 
-	ShaderDirectory::GetShader("depthShader").Use();
-	ShaderDirectory::GetShader("depthShader").SetMat4("lightSpaceMatrix", lightSpaceMatrix);
+	TextureDirectory::BindPBRTextures(EnvironmentMapManager::GetIrradianceMap(), EnvironmentMapManager::GetPrefilterMap());
 
-	glViewport(0, 0, 1024, 1024);
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, FramebufferManager::GetFBO("depthMap").FBO);
+
 	glClear(GL_DEPTH_BUFFER_BIT);
-	DrawObjects();
+
+	ShaderDirectory::GetShader("shadowCubeMap").Use();
+
+	for (int i = 0; i < shadowTransforms.size(); ++i)
+	{
+		ShaderDirectory::GetShader("shadowCubeMap").SetMat4("shadowMatrices[" + std::to_string(i) + "]", shadowTransforms[i]);
+	}
+
+	ShaderDirectory::GetShader("shadowCubeMap").SetMat4("model", model);
+	ShaderDirectory::GetShader("shadowCubeMap").SetVec3("lightPos", lightPos);
+	ShaderDirectory::GetShader("shadowCubeMap").SetFloat("far_plane", far);
+
+	DrawDepthObjects();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -168,44 +223,78 @@ void Renderer::RenderScene()
 
 	// Draw the models in the model directory
 
-	//stbi_set_flip_vertically_on_load(false);
-	ShaderDirectory::GetShader("depthQuad").Use();
-	ShaderDirectory::GetShader("depthQuad").SetFloat("near_plane", 1.0);
-	ShaderDirectory::GetShader("depthQuad").SetFloat("far_plane", 7.5);
+	ShaderDirectory::GetShader("shadow").Use();
 
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("brick_orange_base_map"));
 
-	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("depthMap"));
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("brick_orange_normal_map"));
 
-	Object::Quad();
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("brick_orange_normal_map"));
 
-	//ShaderDirectory::GetShader("pbrMaterial").Use();
+	glActiveTexture(GL_TEXTURE6);
+	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("brick_orange_normal_map"));
 
-	//model = glm::mat4(1.f);
-	//model = glm::translate(model, glm::vec3(3.f, 0.f, 5.f));
-	//model = glm::scale(model, glm::vec3(10.1f, 10.1f, 10.1f));
-	//model = glm::rotate(model, glm::radians(-90.f), glm::vec3(1.f, 0.f, 0.f));
-	//ShaderDirectory::GetShader("pbrMaterial").SetMat4("model", model);
-	//ShaderDirectory::GetShader("pbrMaterial").SetMat4("view", view);
-	//ShaderDirectory::GetShader("pbrMaterial").SetMat4("projection", projection);
+	glActiveTexture(GL_TEXTURE7);
+	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("brick_orange_base_map"));
+
+	glActiveTexture(GL_TEXTURE8);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, TextureDirectory::GetTexture("depthMap"));
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		//lightPositions[i] = glm::vec3((float)sin(glfwGetTime()) * 10.f, 0.f, (float)sin(glfwGetTime()) * 10.f);
+		ShaderDirectory::GetShader("shadow").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
+		ShaderDirectory::GetShader("shadow").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
+
+	}
+	model = glm::scale(model, glm::vec3(.1f, .1f, .1f));
+	model = glm::mat4(1.);
+
+	ShaderDirectory::GetShader("shadow").SetMat4("model", model);
+	ShaderDirectory::GetShader("shadow").SetMat4("view", view);
+	ShaderDirectory::GetShader("shadow").SetVec3("camPos", cameraPos);
+	ShaderDirectory::GetShader("shadow").SetVec3("lightPos", lightPos);
+	ShaderDirectory::GetShader("shadow").SetMat4("lightSpaceMatrix", lightSpaceMatrix);
+	ShaderDirectory::GetShader("shadow").SetMat4("projection", projection);
+	ShaderDirectory::GetShader("shadow").SetFloat("far_plane", far);
+
+	Object::Plane();
+
+	DrawObjects();
+
+	ShaderDirectory::GetShader("lightShader").Use();
+
+	model = glm::mat4(1.);
+
+	model = glm::translate(model, lightPos);
+
+	ShaderDirectory::GetShader("lightShader").SetMat4("model", model);
+	ShaderDirectory::GetShader("lightShader").SetMat4("view", view);
+	ShaderDirectory::GetShader("lightShader").SetMat4("projection", projection);
+
+
+	Object::Sphere();
 
 	//DrawModels();
 
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_CUBE_MAP, EnvironmentMapManager::GetEnvCubeMap());
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, EnvironmentMapManager::GetEnvCubeMap());
 
-	//ShaderDirectory::GetShader("cubemap").Use();
-	//ShaderDirectory::GetShader("cubemap").SetMat4("view", view);
-	//ShaderDirectory::GetShader("cubemap").SetInt("environmentMap", 0);
+	ShaderDirectory::GetShader("cubemap").Use();
+	ShaderDirectory::GetShader("cubemap").SetMat4("view", view);
+	ShaderDirectory::GetShader("cubemap").SetInt("environmentMap", 0);
 
-	//Object::Cube();
+	Object::Cube();
 
 }
 
 // Initializes shaders from ShaderDirectory
 void Renderer::InitShaders()
 {
-
 	ShaderDirectory::SetShader("modelShader", Shader("./shaders/model.vert", "./shaders/model.frag", nullptr));
 	ShaderDirectory::SetShader("pbrMaterial", Shader("./shaders/sphere_pbr.vert", "./shaders/sphere_pbr.frag", nullptr));
 	ShaderDirectory::SetShader("lightShader", Shader("./shaders/sphere_pbr.vert", "./shaders/light.frag", nullptr));
@@ -218,6 +307,9 @@ void Renderer::InitShaders()
 	ShaderDirectory::SetShader("brdfShader", Shader("./shaders/brdf.vert", "./shaders/brdf.frag", nullptr));
 	ShaderDirectory::SetShader("depthShader", Shader("./shaders/depthShader.vert", "./shaders/depthShader.frag", nullptr));
 	ShaderDirectory::SetShader("depthQuad", Shader("./shaders/depthQuad.vert", "./shaders/depthQuad.frag", nullptr));
+	ShaderDirectory::SetShader("shadow", Shader("./shaders/shadow.vert", "./shaders/shadow.frag", nullptr));
+	ShaderDirectory::SetShader("shadowCubeMap", Shader("./shaders/depthCubeMap.vert", "./shaders/depthCubeMap.frag", "./shaders/depthCubeMap.geom"));
+
 
 }
 
@@ -248,61 +340,80 @@ glm::vec3 Renderer::GetCameraPosition()
 	return Renderer::cameraPos;
 }
 
-void Renderer::DrawObjects()
+void Renderer::DrawDepthObjects()
 {
 
-	//ShaderDirectory::GetShader("pbrMaterial").SetVec3("camPos", Renderer::GetCameraPosition());
-
-	//for (int i = 0; i < 4; i++)
-	//{
-
-	//	ShaderDirectory::GetShader("pbrMaterial").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
-	//	ShaderDirectory::GetShader("pbrMaterial").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
-
-	//}
-
-	//ShaderDirectory::GetShader("pbrMaterial").SetMat4("view", view);
-
-	ShaderDirectory::GetShader("depthShader").SetMat4("model", model);
+	model = glm::mat4(1.);
+	model = glm::translate(model, glm::vec3(-10., 2., 0.));
+	ShaderDirectory::GetShader("shadowCubeMap").SetMat4("model", model);
 
 	Object::Sphere();
 
+	glm::mat4 stageModel = glm::mat4(1.);
+
+	stageModel = glm::translate(stageModel, glm::vec3(-8., 1., 4.));
+
+	SetModelMatrix(stageModel);
+
+	ShaderDirectory::GetShader("shadowCubeMap").SetMat4("model", model);
+
+	Object::Sphere();
+
+}
+
+void Renderer::DrawObjects()
+{
+
+	ShaderDirectory::GetShader("pbrMaterial").Use();
+
+	ShaderDirectory::GetShader("pbrMaterial").SetVec3("camPos", Renderer::GetCameraPosition());
+
+	for (int i = 0; i < 4; i++)
+	{
+
+		ShaderDirectory::GetShader("pbrMaterial").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
+		ShaderDirectory::GetShader("pbrMaterial").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
+
+	}
+
+	ShaderDirectory::GetShader("pbrMaterial").SetMat4("view", view);
+
 	model = glm::mat4(1.);
+	model = glm::translate(model, glm::vec3(-10., 2., 0.));
+	ShaderDirectory::GetShader("pbrMaterial").SetMat4("model", model);
 
-	ShaderDirectory::GetShader("depthShader").SetMat4("model", model);
-
-	Object::Plane();
+	Object::Sphere();
 
 	// Eventually, want this to be part of the Objects, but for now, just rendering like this
 	//DrawLights();
 
-	//ShaderDirectory::GetShader("pbrNoMap").Use();
+	ShaderDirectory::GetShader("pbrNoMap").Use();
 
-	//glm::mat4 stageModel = glm::mat4(1.);
+	glm::mat4 stageModel = glm::mat4(1.);
 
-	//stageModel = glm::translate(stageModel, glm::vec3(4., 0., 0.));
+	stageModel = glm::translate(stageModel, glm::vec3(-8., 1., 4.));
 
-	//SetModelMatrix(stageModel);
+	SetModelMatrix(stageModel);
 
-	//ShaderDirectory::GetShader("pbrNoMap").SetVec3("camPos", Renderer::GetCameraPosition());
-	//ShaderDirectory::GetShader("pbrNoMap").SetVec3("albedo", glm::vec3(albedo.r, albedo.g, albedo.b));
+	ShaderDirectory::GetShader("pbrNoMap").SetVec3("camPos", Renderer::GetCameraPosition());
+	ShaderDirectory::GetShader("pbrNoMap").SetVec3("albedo", glm::vec3(albedo.r, albedo.g, albedo.b));
 
-	//for (int i = 0; i < 4; i++)
-	//{
+	for (int i = 0; i < 4; i++)
+	{
 
-	//	ShaderDirectory::GetShader("pbrNoMap").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
-	//	ShaderDirectory::GetShader("pbrNoMap").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
+		ShaderDirectory::GetShader("pbrNoMap").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
+		ShaderDirectory::GetShader("pbrNoMap").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
 
-	//}
+	}
 
-	//ShaderDirectory::GetShader("pbrNoMap").SetMat4("view", view);
+	ShaderDirectory::GetShader("pbrNoMap").SetMat4("view", view);
 
-	//ShaderDirectory::GetShader("pbrNoMap").SetMat4("model", model);
+	ShaderDirectory::GetShader("pbrNoMap").SetMat4("model", model);
 
-	//ShaderDirectory::GetShader("pbrNoMap").SetFloat("metallic", metallic);
-	//ShaderDirectory::GetShader("pbrNoMap").SetFloat("roughness", roughness);
-	//ShaderDirectory::GetShader("pbrNoMap").SetFloat("ao", 1.);
-	//Object::Sphere();
+	ShaderDirectory::GetShader("pbrNoMap").SetFloat("metallic", metallic);
+	ShaderDirectory::GetShader("pbrNoMap").SetFloat("roughness", roughness);
+	ShaderDirectory::GetShader("pbrNoMap").SetFloat("ao", 1.);
+	Object::Sphere();
 
 }
 

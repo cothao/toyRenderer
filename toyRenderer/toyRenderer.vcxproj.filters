@@ -214,5 +214,10 @@
     <None Include="shaders\depthShader.vert" />
     <None Include="shaders\depthQuad.frag" />
     <None Include="shaders\depthQuad.vert" />
+    <None Include="shaders\shadow.frag" />
+    <None Include="shaders\shadow.vert" />
+    <None Include="shaders\depthCubeMap.vert" />
+    <None Include="shaders\depthCubeMap.frag" />
+    <None Include="shaders\depthCubeMap.geom" />
   </ItemGroup>
 </Project>

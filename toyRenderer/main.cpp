@@ -32,7 +32,7 @@ float fov = 45.f;
 int main()
 {
 
-    stbi_set_flip_vertically_on_load(false);
+    stbi_set_flip_vertically_on_load(true);
 
     Renderer::SetProjectionMatrix(glm::perspective(glm::radians(fov), 1600.f / 1000.f, 1.f, 100.f));
     API::Init();

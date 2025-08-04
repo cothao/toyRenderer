@@ -32,6 +32,7 @@ namespace TextureDirectory
 	unsigned int LoadHDRTexture(const char * path);
 	unsigned int LoadLookupTexture();
 	void LoadDepthTexture();
+	void LoadCubeMapDepthTexture();
 	void BindPBRTextures(unsigned int irradianceMap, unsigned int prefilterMap);
 	void BindModelTextureMappings();
 	void BindMapTextures(unsigned int base, unsigned int metallic, unsigned int normal, unsigned int roughness, unsigned int ao);
