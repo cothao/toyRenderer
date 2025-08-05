@@ -8,6 +8,7 @@
 
 namespace Editor
 {
+    // Move to Model/Objects?? EVENTUALLY
 	namespace ObjectContext
 	{
 
@@ -73,42 +74,91 @@ void Editor::StartFrame()
     ImGui::NewFrame();
 
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
+    //if (show_demo_window)
+    //    ImGui::ShowDemoWindow(&show_demo_window);
 
-    // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
     {
-        static int counter = 0;
+        ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_Reorderable;
+        tab_bar_flags |= ImGuiTabBarFlags_DrawSelectedOverline;
+        if (ImGui::BeginTabBar("##tabs", tab_bar_flags))
+        {
 
-        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+            // [DEBUG] Stress tests
+            //if ((ImGui::GetFrameCount() % 30) == 0) docs[1].Open ^= 1;            // [DEBUG] Automatically show/hide a tab. Test various interactions e.g. dragging with this on.
+            //if (ImGui::GetIO().KeyCtrl) ImGui::SetTabItemSelected(docs[1].Name);  // [DEBUG] Test SetTabItemSelected(), probably not very useful as-is anyway..
+                bool v = true;
+                bool b = true;
 
-        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-        ImGui::Checkbox("Another Window", &show_another_window);
-
-        ImGui::SliderFloat("float", ObjectContext::roughness, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::SliderFloat("metallic", ObjectContext::metallic, 0.0f, 1.0f);
-        ImGui::ColorEdit3("albedo", (float*)ObjectContext::albedo); // Edit 3 floats representing a color
-        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+            // Submit Tabs
+            for (int i = 0; i < 1; ++i)
+            {
 
 
-        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
-        DemoWindowWidgetsImages();
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / (*io).Framerate, (*io).Framerate);
-        ImGui::End();
-    }
+                if (ImGui::BeginTabItem("Object Manager", &v, 0))
+                {
+                    // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
+                    {
 
-    // 3. Show another simple window.
-    if (show_another_window)
-    {
-        ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-        ImGui::Text("Hello from another window!");
-        if (ImGui::Button("Close Me"))
-            show_another_window = false;
-        ImGui::End();
+                        static int counter = 0;
+
+                        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+                        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+                        ImGui::Checkbox("Another Window", &show_another_window);
+
+                        ImGui::Checkbox("Flip UVs", &TextureDirectory::flip_uvs);
+                        ImGui::SliderFloat("float", ObjectContext::roughness, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+                        ImGui::SliderFloat("metallic", ObjectContext::metallic, 0.0f, 1.0f);
+                        ImGui::InputFloat3("size", (float*)&ModelDirectory::size);
+						ImGui::SliderFloat3("Rotation", (float*)&ModelDirectory::rotation, -180.0f, 180.0f); // Edit 3 floats using a slider from -180.0f to 180.0f
+						ImGui::InputFloat3("Translation", (float*)&ModelDirectory::translation); // Edit 3 floats using a slider from -180.0f to 180.0f
+                        ImGui::ColorEdit3("albedo", (float*)ObjectContext::albedo); // Edit 3 floats representing a color
+                        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+                        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                            counter++;
+                        ImGui::SameLine();
+                        ImGui::Text("counter = %d", counter);
+                        DemoWindowWidgetsImages();
+                        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / (*io).Framerate, (*io).Framerate);
+                    }
+                ImGui::EndTabItem();
+                };
+
+
+                if (ImGui::BeginTabItem("Floor Manager", &b, 0))
+                {
+                    // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
+                    {
+
+                        static int counter = 0;
+
+                        //ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+                        ImGui::Text("This is the floor manager.");               // Display some text (you can use a format strings too)
+                        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+                        ImGui::Checkbox("Another Window", &show_another_window);
+
+                        ImGui::SliderFloat("float", ObjectContext::roughness, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+                        ImGui::SliderFloat("metallic", ObjectContext::metallic, 0.0f, 1.0f);
+                        ImGui::ColorEdit3("albedo", (float*)ObjectContext::albedo); // Edit 3 floats representing a color
+                        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+
+                        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                            counter++;
+                        ImGui::SameLine();
+                        ImGui::Text("counter = %d", counter);
+                        FloorTextureDisplayer();
+                        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / (*io).Framerate, (*io).Framerate);
+                        //ImGui::End();
+                    }
+                    ImGui::EndTabItem();
+                };
+
+            }
+
+            ImGui::EndTabBar();
+        }
     }
 
     RenderMainMenuBar();
@@ -285,7 +335,7 @@ static void Editor::DemoWindowWidgetsImages()
             std::string     textureName = textureKey->first;
 			TextureMapping  textureMapping = textureKey->second;
 
-            //if (textureKey->second)	    std::cout << "Texture Key: " << textureName << std::endl;
+            //if (textureName != "")	    std::cout << "Texture Key: " << textureName << std::endl;
             //std::cout << textureKey->second << "\n";
             ImTextureID     my_tex_id = TextureDirectory::TextureMappings[textureName].id;
             // UV coordinates are often (0.0f, 0.0f) and (1.0f, 1.0f) to display an entire textures.
@@ -322,8 +372,71 @@ static void Editor::DemoWindowWidgetsImages()
             //ImGui::SameLine();
             textureId++;
         }
-        ImGui::NewLine();
+        //ImGui::NewLine();
 }
+
+static void Editor::FloorTextureDisplayer()
+{
+
+    ImGuiIO& io = ImGui::GetIO();
+    ImGui::TextWrapped(
+        "Below we are displaying the font texture (which is the only texture we have access to in this demo). "
+        "Use the 'ImTextureID' type as storage to pass pointers or identifier to your own texture data. "
+        "Hover the texture for a zoomed view!");
+
+    // Regular user code should never have to care about TexData-> fields, but since we want to display the entire texture here, we pull Width/Height from it.
+    float my_tex_w = (float)io.Fonts->TexData->Width;
+    float my_tex_h = (float)io.Fonts->TexData->Height;
+
+    ImGui::TextWrapped("And now some textured buttons..");
+    int textureId = 0;
+
+    for (auto textureKey = TextureDirectory::FloorTextureMappings.begin(); textureKey != TextureDirectory::FloorTextureMappings.end(); textureKey++)
+    {
+
+        std::string     textureName = textureKey->first;
+        TextureMapping  textureMapping = textureKey->second;
+
+        //if (textureKey->second)	    std::cout << "Texture Key: " << textureName << std::endl;
+        //std::cout << textureKey->second << "\n";
+        ImTextureID     my_tex_id = TextureDirectory::FloorTextureMappings[textureName].id;
+        // UV coordinates are often (0.0f, 0.0f) and (1.0f, 1.0f) to display an entire textures.
+        // Here are trying to display only a 32x32 pixels area of the texture, hence the UV computation.
+        // Read about UV coordinates here: https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
+        ImGui::PushID(textureId);
+
+        if (textureId > 0)
+            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(textureId - 1.0f, textureId - 1.0f));
+        ImVec2 size = ImVec2(32.0f, 32.0f);                         // Size of the image we want to make visible
+        ImVec2 uv0 = ImVec2(0.0f, 0.0f);                            // UV coordinates for lower-left
+        ImVec2 uv1 = ImVec2(32.0f / my_tex_w, 32.0f / my_tex_h);    // UV coordinates for (32,32) in our texture
+        ImVec4 bg_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);             // Black background
+        ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);           // No tint
+
+        if (ImGui::ImageButton("", my_tex_id, size, uv0, uv1, bg_col, tint_col))
+        {
+            current_displayed_image = textureName;
+            show_image_display = !show_image_display;
+        }
+
+        ImGui::Text(textureMapping.name.c_str());
+
+        ImageDisplay(TextureDirectory::FloorTextureMappings[textureName]);
+
+        if (ImGui::Button("Insert"))
+        {
+            TextureDirectory::FloorTextureMappings[textureName].SetTextureMapping(textureName);
+        }
+
+        if (textureId > 0)
+            ImGui::PopStyleVar();
+        ImGui::PopID();
+        //ImGui::SameLine();
+        textureId++;
+    }
+    ImGui::NewLine();
+}
+
 
 void Editor::ImageDisplay(TextureMapping texture)
 {

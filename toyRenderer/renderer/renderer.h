@@ -58,7 +58,7 @@ namespace Renderer
 	void DrawObjects();
 	void DrawDepthObjects();
 	void DrawModel(std::string modelName, std::string shaderName);
-	void DrawModels();
+	void DrawModels(std::string shaderName);
 	void DrawLights();
 	void ChangeHDRState();
 

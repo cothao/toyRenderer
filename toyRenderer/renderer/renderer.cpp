@@ -22,7 +22,7 @@ namespace Renderer
 	extern float metallic = 1.f;
 	extern float roughness = .0f;
 	extern unsigned int brdfLUTTexture = 0;
-	extern std::string currentHDRTexture = "loft";
+	extern std::string currentHDRTexture = "sky";
 	extern std::string lastHDRTexture = currentHDRTexture;
 	extern int SHADOW_WIDTH = 1024;
 	extern int SHADOW_HEIGHT = 1024;
@@ -88,8 +88,9 @@ shadowTransforms.push_back(shadowProj *
 	TextureDirectory::SetTexture("brick_normal_map", "../images/brickwall/brickwall_normal.jpg", false);
 	TextureDirectory::SetTexture("brick_orange_base_map", "../images/bricks/bricks2.jpg", false);
 	TextureDirectory::SetTexture("brick_orange_normal_map", "../images/bricks/bricks2_normal.jpg", false);
-
+	
 	TextureDirectory::SetHDRTexture("photo_studio", "../images/hdr/photo_studio_loft_hall_4k.hdr");
+	TextureDirectory::SetHDRTexture("sky", "../images/hdr/rustig_koppie_puresky_8k.hdr");
 	TextureDirectory::SetHDRTexture("field", "../images/hdr/horn-koppe_spring_4k.hdr");
 	TextureDirectory::SetHDRTexture("loft", "../images/hdr/newport_loft.hdr");
 
@@ -185,14 +186,6 @@ void Renderer::RenderScene()
 
 	ChangeHDRState();
 
-	//TextureDirectory::BindMapTextures(
-	//	TextureDirectory::GetTexture("rusted_metal_base_map"),
-	//	TextureDirectory::GetTexture("rusted_metal_metallic_map"),
-	//	TextureDirectory::GetTexture("rusted_metal_normal_map"),
-	//	TextureDirectory::GetTexture("rusted_metal_roughness_map"),
-	//	TextureDirectory::GetTexture("rusted_metal_ao_map")
-	//);
-
 	//lightPos = glm::vec3(-20 - cos(glfwGetTime()) * 5., 10.f, sin(glfwGetTime()));
 
 	TextureDirectory::BindPBRTextures(EnvironmentMapManager::GetIrradianceMap(), EnvironmentMapManager::GetPrefilterMap());
@@ -210,12 +203,23 @@ void Renderer::RenderScene()
 		ShaderDirectory::GetShader("shadowCubeMap").SetMat4("shadowMatrices[" + std::to_string(i) + "]", shadowTransforms[i]);
 	}
 
-	ShaderDirectory::GetShader("shadowCubeMap").SetMat4("model", model);
 	ShaderDirectory::GetShader("shadowCubeMap").SetVec3("lightPos", lightPos);
 	ShaderDirectory::GetShader("shadowCubeMap").SetFloat("far_plane", far);
 
-	DrawDepthObjects();
+	model = glm::translate(model, ModelDirectory::translation);
+	model = glm::scale(model, ModelDirectory::size);
+	model = glm::rotate(model, ModelDirectory::rotation.x, glm::vec3(1., 0., 0.));
+	model = glm::rotate(model, ModelDirectory::rotation.y, glm::vec3(0., 1., 0.));
+	model = glm::rotate(model, ModelDirectory::rotation.z, glm::vec3(0., 0., 1.));
 
+	ShaderDirectory::GetShader("shadowCubeMap").SetMat4("model", model);
+
+	DrawModels("shadowCubeMap");
+	model = glm::mat4(1.);
+	ShaderDirectory::GetShader("shadowCubeMap").SetMat4("model", model);
+
+	DrawDepthObjects();
+	model = glm::mat4(1.);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glViewport(0, 0, 1600, 1000);
@@ -225,25 +229,6 @@ void Renderer::RenderScene()
 
 	ShaderDirectory::GetShader("shadow").Use();
 
-	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("brick_orange_base_map"));
-
-	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("brick_orange_normal_map"));
-
-	glActiveTexture(GL_TEXTURE5);
-	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("brick_orange_normal_map"));
-
-	glActiveTexture(GL_TEXTURE6);
-	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("brick_orange_normal_map"));
-
-	glActiveTexture(GL_TEXTURE7);
-	glBindTexture(GL_TEXTURE_2D, TextureDirectory::GetTexture("brick_orange_base_map"));
-
-	glActiveTexture(GL_TEXTURE8);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, TextureDirectory::GetTexture("depthMap"));
-
-
 	for (int i = 0; i < 4; i++)
 	{
 		//lightPositions[i] = glm::vec3((float)sin(glfwGetTime()) * 10.f, 0.f, (float)sin(glfwGetTime()) * 10.f);
@@ -251,7 +236,7 @@ void Renderer::RenderScene()
 		ShaderDirectory::GetShader("shadow").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
 
 	}
-	model = glm::scale(model, glm::vec3(.1f, .1f, .1f));
+
 	model = glm::mat4(1.);
 
 	ShaderDirectory::GetShader("shadow").SetMat4("model", model);
@@ -262,10 +247,26 @@ void Renderer::RenderScene()
 	ShaderDirectory::GetShader("shadow").SetMat4("projection", projection);
 	ShaderDirectory::GetShader("shadow").SetFloat("far_plane", far);
 
+	TextureDirectory::BindFloorTextureMappings();
+
 	Object::Plane();
 
-	DrawObjects();
+	ShaderDirectory::GetShader("pbrMaterial").Use();
 
+	TextureDirectory::BindModelTextureMappings();
+	stbi_set_flip_vertically_on_load(TextureDirectory::flip_uvs);
+	model = glm::translate(model, ModelDirectory::translation);
+	model = glm::scale(model, ModelDirectory::size);
+	model = glm::rotate(model, ModelDirectory::rotation.x, glm::vec3(1., 0., 0.));
+	model = glm::rotate(model, ModelDirectory::rotation.y, glm::vec3(0., 1., 0.));
+	model = glm::rotate(model, ModelDirectory::rotation.z, glm::vec3(0., 0., 1.));
+
+	ShaderDirectory::GetShader("pbrMaterial").SetMat4("model", model);
+
+	DrawModels("pbrMaterial");
+
+	DrawObjects();
+	
 	ShaderDirectory::GetShader("lightShader").Use();
 
 	model = glm::mat4(1.);
@@ -276,10 +277,8 @@ void Renderer::RenderScene()
 	ShaderDirectory::GetShader("lightShader").SetMat4("view", view);
 	ShaderDirectory::GetShader("lightShader").SetMat4("projection", projection);
 
-
 	Object::Sphere();
 
-	//DrawModels();
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, EnvironmentMapManager::GetEnvCubeMap());
@@ -309,8 +308,6 @@ void Renderer::InitShaders()
 	ShaderDirectory::SetShader("depthQuad", Shader("./shaders/depthQuad.vert", "./shaders/depthQuad.frag", nullptr));
 	ShaderDirectory::SetShader("shadow", Shader("./shaders/shadow.vert", "./shaders/shadow.frag", nullptr));
 	ShaderDirectory::SetShader("shadowCubeMap", Shader("./shaders/depthCubeMap.vert", "./shaders/depthCubeMap.frag", "./shaders/depthCubeMap.geom"));
-
-
 }
 
 void Renderer::InitModels()
@@ -343,22 +340,14 @@ glm::vec3 Renderer::GetCameraPosition()
 void Renderer::DrawDepthObjects()
 {
 
-	model = glm::mat4(1.);
-	model = glm::translate(model, glm::vec3(-10., 2., 0.));
-	ShaderDirectory::GetShader("shadowCubeMap").SetMat4("model", model);
-
-	Object::Sphere();
-
 	glm::mat4 stageModel = glm::mat4(1.);
 
 	stageModel = glm::translate(stageModel, glm::vec3(-8., 1., 4.));
+	stageModel = glm::scale(stageModel, ModelDirectory::size);
 
 	SetModelMatrix(stageModel);
 
 	ShaderDirectory::GetShader("shadowCubeMap").SetMat4("model", model);
-
-	Object::Sphere();
-
 }
 
 void Renderer::DrawObjects()
@@ -378,42 +367,37 @@ void Renderer::DrawObjects()
 
 	ShaderDirectory::GetShader("pbrMaterial").SetMat4("view", view);
 
-	model = glm::mat4(1.);
-	model = glm::translate(model, glm::vec3(-10., 2., 0.));
-	ShaderDirectory::GetShader("pbrMaterial").SetMat4("model", model);
-
-	Object::Sphere();
 
 	// Eventually, want this to be part of the Objects, but for now, just rendering like this
 	//DrawLights();
+	model = glm::mat4(1.);
 
+	model = glm::translate(model, glm::vec3(-8., 1., 4.));
+
+	ShaderDirectory::GetShader("pbrMaterial").SetMat4("model", model);
 	ShaderDirectory::GetShader("pbrNoMap").Use();
 
-	glm::mat4 stageModel = glm::mat4(1.);
+	SetModelMatrix(model);
 
-	stageModel = glm::translate(stageModel, glm::vec3(-8., 1., 4.));
+	//ShaderDirectory::GetShader("pbrNoMap").SetVec3("camPos", Renderer::GetCameraPosition());
+	//ShaderDirectory::GetShader("pbrNoMap").SetVec3("albedo", glm::vec3(albedo.r, albedo.g, albedo.b));
 
-	SetModelMatrix(stageModel);
+	//for (int i = 0; i < 4; i++)
+	//{
 
-	ShaderDirectory::GetShader("pbrNoMap").SetVec3("camPos", Renderer::GetCameraPosition());
-	ShaderDirectory::GetShader("pbrNoMap").SetVec3("albedo", glm::vec3(albedo.r, albedo.g, albedo.b));
+	//	ShaderDirectory::GetShader("pbrNoMap").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
+	//	ShaderDirectory::GetShader("pbrNoMap").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
 
-	for (int i = 0; i < 4; i++)
-	{
+	//}
 
-		ShaderDirectory::GetShader("pbrNoMap").SetVec3("lightPosition[" + std::to_string(i) + ']', lightPositions[i]);
-		ShaderDirectory::GetShader("pbrNoMap").SetVec3("lightColor[" + std::to_string(i) + ']', lightColors[i]);
+	//ShaderDirectory::GetShader("pbrNoMap").SetMat4("view", view);
 
-	}
+	//ShaderDirectory::GetShader("pbrNoMap").SetMat4("model", model);
 
-	ShaderDirectory::GetShader("pbrNoMap").SetMat4("view", view);
-
-	ShaderDirectory::GetShader("pbrNoMap").SetMat4("model", model);
-
-	ShaderDirectory::GetShader("pbrNoMap").SetFloat("metallic", metallic);
-	ShaderDirectory::GetShader("pbrNoMap").SetFloat("roughness", roughness);
-	ShaderDirectory::GetShader("pbrNoMap").SetFloat("ao", 1.);
-	Object::Sphere();
+	//ShaderDirectory::GetShader("pbrNoMap").SetFloat("metallic", metallic);
+	//ShaderDirectory::GetShader("pbrNoMap").SetFloat("roughness", roughness);
+	//ShaderDirectory::GetShader("pbrNoMap").SetFloat("ao", 1.);
+	//Object::Sphere();
 
 }
 
@@ -422,13 +406,13 @@ void Renderer::DrawModel(std::string modelName, std::string shaderName)
 	ModelDirectory::Directory[modelName].Draw(ShaderDirectory::GetShader(shaderName));
 }
 
-void Renderer::DrawModels() 
+void Renderer::DrawModels(std::string shaderName) 
 {
 	for (auto modelKey = ModelDirectory::Directory.begin(); modelKey != ModelDirectory::Directory.end(); modelKey++)
 	{
 		std::string modelName = modelKey->first;
 		TextureDirectory::BindModelTextureMappings();
-		DrawModel(modelName, "pbrMaterial");
+		DrawModel(modelName, shaderName);
 	}
 }
 
