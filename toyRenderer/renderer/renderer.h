@@ -15,11 +15,16 @@ namespace Renderer
 	extern glm::mat4 model;
 	extern glm::mat4 view;
 	extern glm::mat4 projection;
+	extern glm::mat4 lightProjection;
+	extern glm::mat4 lightView;
+	extern glm::vec3 lightPos;
+	extern glm::mat4 lightSpaceMatrix;
 	extern glm::vec3 cameraPos;
 	extern glm::vec4 albedo;
 	extern int nrRows;
 	extern int nrColumns;
 	extern float spacing;
+	extern std::vector<glm::mat4> shadowTransforms;
 	extern glm::vec3 lightPositions[];
 	extern glm::vec3 lightColors[];
 	extern float roughness;
@@ -30,6 +35,12 @@ namespace Renderer
 	extern unsigned int brdfLUTTexture;
 	extern std::string currentHDRTexture;
 	extern std::string lastHDRTexture;
+	extern float aspect;
+	extern float near;
+	extern float far;
+	extern glm::mat4 shadowProj;
+	extern int SHADOW_WIDTH;
+	extern int SHADOW_HEIGHT;
 
 	// Initializes models, shaders, buffers, matrices, etc.
 	void Init();
@@ -45,8 +56,9 @@ namespace Renderer
 	void InitEnvironmentMap();
 	void ConfigureShaders();
 	void DrawObjects();
+	void DrawDepthObjects();
 	void DrawModel(std::string modelName, std::string shaderName);
-	void DrawModels();
+	void DrawModels(std::string shaderName);
 	void DrawLights();
 	void ChangeHDRState();
 

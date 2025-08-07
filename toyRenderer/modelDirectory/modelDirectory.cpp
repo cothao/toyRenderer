@@ -5,6 +5,9 @@
 
 namespace ModelDirectory
 {
+	extern glm::vec3 size = glm::vec3(1.);
+	extern glm::vec3 rotation = glm::vec3(1.);
+	extern glm::vec3 translation = glm::vec3(1.);
 	std::map<std::string, Model> Directory = {};
 }
 

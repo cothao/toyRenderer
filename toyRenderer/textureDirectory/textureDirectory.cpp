@@ -10,6 +10,7 @@ TextureMapping::TextureMapping(std::string name, unsigned int id, void (*texture
 namespace TextureDirectory
 {
 	extern std::map<std::string, unsigned int> Directory = {};
+	extern bool flip_uvs = false;
 	extern std::map<std::string, TextureMapping> TextureMappings = { 
 		{"metallic_map", TextureMapping("metallic_map", (unsigned int)0, SetTextureMapping)},
 		{"normal_map", TextureMapping("normal_map", (unsigned int)0, SetTextureMapping)},
@@ -17,6 +18,15 @@ namespace TextureDirectory
 		{"ao_map", TextureMapping("ao_map", (unsigned int)0, SetTextureMapping)},
 		{"base_map", TextureMapping("base_map", (unsigned int)0, SetTextureMapping)}
 	};
+
+	extern std::map<std::string, TextureMapping> FloorTextureMappings = {
+	{"floor_metallic_map", TextureMapping("floor_metallic_map", (unsigned int)0, SetFloorTextureMapping)},
+	{"floor_normal_map", TextureMapping("floor_normal_map", (unsigned int)0, SetFloorTextureMapping)},
+	{"floor_roughness_map", TextureMapping("floor_roughness_map", (unsigned int)0, SetFloorTextureMapping)},
+	{"floor_ao_map", TextureMapping("floor_ao_map", (unsigned int)0, SetFloorTextureMapping)},
+	{"floor_base_map", TextureMapping("floor_base_map", (unsigned int)0, SetFloorTextureMapping)}
+	};
+
 }
 
 void TextureDirectory::SetTexture(std::string name, const char * path, bool gamma)
@@ -44,6 +54,11 @@ unsigned int TextureDirectory::GetTexture(std::string name)
 unsigned int TextureDirectory::GetTextureMapping(std::string name)
 {
 	return TextureMappings[name].id;
+}
+
+unsigned int TextureDirectory::GetFloorTextureMapping(std::string name)
+{
+	return FloorTextureMappings[name].id;
 }
 
 unsigned int TextureDirectory::LoadTexture(const char * path, bool gamma)
@@ -102,6 +117,47 @@ unsigned int TextureDirectory::LoadTexture(const char * path, bool gamma)
 
 }
 
+void TextureDirectory::LoadDepthTexture()
+{
+
+	unsigned int textureID;
+
+	glGenTextures(1, &textureID);
+
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		TextureDirectory::Directory["depthMap"] = textureID;
+
+}
+
+void TextureDirectory::LoadCubeMapDepthTexture()
+{
+	unsigned int depthCubemap;
+	glGenTextures(1, &depthCubemap);
+
+	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+	glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
+	for (unsigned int i = 0; i < 6; ++i)
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT,
+			SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	TextureDirectory::Directory["depthMap"] = depthCubemap;
+
+}
 
 unsigned int TextureDirectory::LoadHDRTexture(const char* path)
 {
@@ -199,6 +255,24 @@ void TextureDirectory::BindModelTextureMappings()
 	);
 }
 
+void TextureDirectory::BindFloorTextureMappings()
+{
+
+	BindMapTextures(
+		GetFloorTextureMapping("floor_base_map") == 0 ? GetTexture("brick_orange_base_map") : GetFloorTextureMapping("floor_base_map"),
+		GetFloorTextureMapping("floor_metallic_map") == 0 ? GetTexture("brick_orange_base_map") : GetFloorTextureMapping("floor_metallic_map"),
+		GetFloorTextureMapping("floor_normal_map") == 0 ? GetTexture("brick_orange_normal_map") : GetFloorTextureMapping("floor_normal_map"),
+		GetFloorTextureMapping("floor_roughness_map") == 0 ? GetTexture("brick_orange_base_map") : GetFloorTextureMapping("floor_roughness_map"),
+		GetFloorTextureMapping("floor_ao_map") == 0 ? GetTexture("brick_orange_base_map") : GetFloorTextureMapping("floor_ao_map")
+	);
+
+	glActiveTexture(GL_TEXTURE8);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, GetTexture("depthMap"));
+
+
+}
+
+
 void TextureDirectory::SetTextureFromFile()
 {
 	const char* texturePath = FileDialog::getFile();
@@ -249,5 +323,19 @@ void TextureDirectory::SetTextureMapping(std::string textureType)
 	else
 	{
 		TextureMappings[textureType].id = LoadTexture(texturePath, false);
+	}
+}
+
+void TextureDirectory::SetFloorTextureMapping(std::string textureType)
+{
+	const char* texturePath = FileDialog::getFile();
+
+	if (!texturePath)
+	{
+		std::cout << "ERROR | AO Texture not found\n";
+	}
+	else
+	{
+		FloorTextureMappings[textureType].id = LoadTexture(texturePath, false);
 	}
 }

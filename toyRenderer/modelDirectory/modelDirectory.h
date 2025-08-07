@@ -8,6 +8,9 @@
 namespace ModelDirectory
 {
 
+	extern glm::vec3 size;
+	extern glm::vec3 rotation;
+	extern glm::vec3 translation;
 	extern std::map<std::string, Model> Directory;
 	void SetModel(std::string modelName, Model model);
 	void SetModelFromFile();

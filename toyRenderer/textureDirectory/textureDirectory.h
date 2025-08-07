@@ -21,14 +21,13 @@ namespace TextureDirectory
 
 	extern std::map<std::string, unsigned int> Directory;
 	extern std::map<std::string, TextureMapping> TextureMappings;
+	extern std::map<std::string, TextureMapping> FloorTextureMappings;
+	extern bool flip_uvs;
 	void SetTexture(std::string name, const char* path, bool gamma);
 	void SetTextureFromFile();
-	void SetBaseTexture();
-	void SetMetallicTexture();
-	void SetNormalTexture();
-	void SetRoughnessTexture();
-	void SetAOTexture();
 	void SetTextureMapping(std::string textureType);
+	unsigned int GetFloorTextureMapping(std::string name);
+	void SetFloorTextureMapping(std::string textureType);
 	void SetLookupTexture(std::string name);
 	void SetHDRTexture(std::string name, const char* path);
 	unsigned int GetTexture(std::string name);
@@ -36,8 +35,11 @@ namespace TextureDirectory
 	unsigned int LoadTexture(const char * path, bool gamma);
 	unsigned int LoadHDRTexture(const char * path);
 	unsigned int LoadLookupTexture();
+	void LoadDepthTexture();
+	void LoadCubeMapDepthTexture();
 	void BindPBRTextures(unsigned int irradianceMap, unsigned int prefilterMap);
 	void BindModelTextureMappings();
+	void BindFloorTextureMappings();
 	void BindMapTextures(unsigned int base, unsigned int metallic, unsigned int normal, unsigned int roughness, unsigned int ao);
 	void SetHDRTextureFromFile();
 	void Unbind2DMaps();

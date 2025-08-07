@@ -30,6 +30,7 @@ namespace Editor
 	void Config();
 	void ImageDisplay(TextureMapping texture);
 	static void DemoWindowWidgetsImages();
+	static void FloorTextureDisplayer();
 	void Terminate();
 
 	namespace {

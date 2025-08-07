@@ -1,2 +1,5 @@
-﻿  modelDirectory.cpp
+﻿  renderer.cpp
+C:\Users\colli\source\repos\toyRenderer\toyRenderer\input\input.h(17,3): warning C4091: 'extern ': ignored on left of 'Input::InputTypes' when no variable is declared
+  (compiling source file 'renderer/renderer.cpp')
+  
   toyRenderer.vcxproj -> C:\Users\colli\source\repos\toyRenderer\x64\Debug\toyRenderer.exe
