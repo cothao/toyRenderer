@@ -348,7 +348,7 @@ void Renderer::DrawDepthObjects()
 	SetModelMatrix(stageModel);
 
 	ShaderDirectory::GetShader("shadowCubeMap").SetMat4("model", model);
-}
+}//hola
 
 void Renderer::DrawObjects()
 {
