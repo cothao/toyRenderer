@@ -34,6 +34,7 @@ namespace Renderer
 	extern unsigned int prefilterMap;
 	extern unsigned int brdfLUTTexture;
 	extern std::string currentHDRTexture;
+	extern std::string currentShader;
 	extern std::string lastHDRTexture;
 	extern float aspect;
 	extern float near;
@@ -41,6 +42,8 @@ namespace Renderer
 	extern glm::mat4 shadowProj;
 	extern int SHADOW_WIDTH;
 	extern int SHADOW_HEIGHT;
+	extern bool usePBRMaterial;
+	extern bool viewSphere;
 
 	// Initializes models, shaders, buffers, matrices, etc.
 	void Init();
@@ -51,11 +54,13 @@ namespace Renderer
 	void ClearBuffers();
 	void ClearColor(glm::vec4 color);
 	void RenderScene();
+	void ShadowPass();
+	void ObjectPass();
 	void InitShaders();
 	void InitModels();
 	void InitEnvironmentMap();
 	void ConfigureShaders();
-	void DrawObjects();
+	void DrawObjects(std::string currentShader);
 	void DrawDepthObjects();
 	void DrawModel(std::string modelName, std::string shaderName);
 	void DrawModels(std::string shaderName);

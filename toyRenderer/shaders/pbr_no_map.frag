@@ -15,7 +15,7 @@ uniform vec3 lightColor[4];
 uniform vec3 albedo;
 uniform float roughness;
 uniform float metallic;
-uniform float ao;
+uniform float ao = 0.;
 uniform vec3 camPos;
 
 #define PI 3.14f

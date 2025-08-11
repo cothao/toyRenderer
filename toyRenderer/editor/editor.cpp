@@ -76,18 +76,17 @@ void Editor::StartFrame()
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     //if (show_demo_window)
     //    ImGui::ShowDemoWindow(&show_demo_window);
-
+    bool v = true;
+    bool b = true;
     {
         ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_Reorderable;
         tab_bar_flags |= ImGuiTabBarFlags_DrawSelectedOverline;
-        if (ImGui::BeginTabBar("##tabs", tab_bar_flags))
+        if (ImGui::BeginTabBar("#tabs", tab_bar_flags))
         {
 
             // [DEBUG] Stress tests
             //if ((ImGui::GetFrameCount() % 30) == 0) docs[1].Open ^= 1;            // [DEBUG] Automatically show/hide a tab. Test various interactions e.g. dragging with this on.
             //if (ImGui::GetIO().KeyCtrl) ImGui::SetTabItemSelected(docs[1].Name);  // [DEBUG] Test SetTabItemSelected(), probably not very useful as-is anyway..
-                bool v = true;
-                bool b = true;
 
             // Submit Tabs
             for (int i = 0; i < 1; ++i)
@@ -99,25 +98,18 @@ void Editor::StartFrame()
                     // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
                     {
 
-                        static int counter = 0;
-
-                        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-                        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-                        ImGui::Checkbox("Another Window", &show_another_window);
-
                         ImGui::Checkbox("Flip UVs", &TextureDirectory::flip_uvs);
-                        ImGui::SliderFloat("float", ObjectContext::roughness, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+                        ImGui::Checkbox("PBR Material", &Renderer::usePBRMaterial);
+                        ImGui::Checkbox("ViewSphere", &Renderer::viewSphere);
+                        
+                        ImGui::SliderFloat("roughness", ObjectContext::roughness, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
                         ImGui::SliderFloat("metallic", ObjectContext::metallic, 0.0f, 1.0f);
                         ImGui::InputFloat3("size", (float*)&ModelDirectory::size);
 						ImGui::SliderFloat3("Rotation", (float*)&ModelDirectory::rotation, -180.0f, 180.0f); // Edit 3 floats using a slider from -180.0f to 180.0f
 						ImGui::InputFloat3("Translation", (float*)&ModelDirectory::translation); // Edit 3 floats using a slider from -180.0f to 180.0f
                         ImGui::ColorEdit3("albedo", (float*)ObjectContext::albedo); // Edit 3 floats representing a color
                         ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-                        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                            counter++;
                         ImGui::SameLine();
-                        ImGui::Text("counter = %d", counter);
                         DemoWindowWidgetsImages();
                         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / (*io).Framerate, (*io).Framerate);
                     }
@@ -130,27 +122,15 @@ void Editor::StartFrame()
                     // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
                     {
 
-                        static int counter = 0;
-
-                        //ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-                        ImGui::Text("This is the floor manager.");               // Display some text (you can use a format strings too)
-                        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-                        ImGui::Checkbox("Another Window", &show_another_window);
-
                         ImGui::SliderFloat("float", ObjectContext::roughness, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
                         ImGui::SliderFloat("metallic", ObjectContext::metallic, 0.0f, 1.0f);
                         ImGui::ColorEdit3("albedo", (float*)ObjectContext::albedo); // Edit 3 floats representing a color
                         ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
 
-                        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                            counter++;
                         ImGui::SameLine();
-                        ImGui::Text("counter = %d", counter);
                         FloorTextureDisplayer();
                         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / (*io).Framerate, (*io).Framerate);
-                        //ImGui::End();
                     }
                     ImGui::EndTabItem();
                 };
@@ -181,16 +161,16 @@ void Editor::RenderMainMenuBar()
             Config();
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Edit"))
-        {
-            if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {} // Disabled item
-            ImGui::Separator();
-            if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-            if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-            if (ImGui::MenuItem("Paste", "CTRL+V")) {}
-            ImGui::EndMenu();
-        }
+        //if (ImGui::BeginMenu("Edit"))
+        //{
+        //    if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+        //    if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {} // Disabled item
+        //    ImGui::Separator();
+        //    if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+        //    if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+        //    if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+        //    ImGui::EndMenu();
+        //}
         ImGui::EndMainMenuBar();
     }
 
@@ -198,9 +178,6 @@ void Editor::RenderMainMenuBar()
 
 void Editor::Config()
 {
-    //IMGUI_DEMO_MARKER("Examples/Menu");
-    ImGui::MenuItem("(demo menu)", NULL, false, false);
-    if (ImGui::MenuItem("New")) {}
     if (ImGui::MenuItem("Open texture", "Ctrl+O")) 
     {
         //ModelDirectory::SetModelFromFile();
@@ -211,79 +188,46 @@ void Editor::Config()
         ModelDirectory::SetModelFromFile();
         //TextureDirectory::SetHDRTextureFromFile();
     }
-    if (ImGui::BeginMenu("Open Recent"))
-    {
-        ImGui::MenuItem("fish_hat.c");
-        ImGui::MenuItem("fish_hat.inl");
-        ImGui::MenuItem("fish_hat.h");
-        if (ImGui::BeginMenu("More.."))
-        {
-            ImGui::MenuItem("Hello");
-            ImGui::MenuItem("Sailor");
-            if (ImGui::BeginMenu("Recurse.."))
-            {
-                Config();
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenu();
-        }
-        ImGui::EndMenu();
-    }
-    if (ImGui::MenuItem("Save", "Ctrl+S")) {}
-    if (ImGui::MenuItem("Save As..")) {}
+    // commenting out as this might be useful for later projects
+    //if (ImGui::BeginMenu("Open Recent"))
+    //{
+    //    ImGui::MenuItem("fish_hat.c");
+    //    ImGui::MenuItem("fish_hat.inl");
+    //    ImGui::MenuItem("fish_hat.h");
+    //    if (ImGui::BeginMenu("More.."))
+    //    {
+    //        ImGui::MenuItem("Hello");
+    //        ImGui::MenuItem("Sailor");
+    //        if (ImGui::BeginMenu("Recurse.."))
+    //        {
+    //            Config();
+    //            ImGui::EndMenu();
+    //        }
+    //        ImGui::EndMenu();
+    //    }
+    //    ImGui::EndMenu();
+    //}
+    //if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+    //if (ImGui::MenuItem("Save As..")) {}
 
-    ImGui::Separator();
-    //IMGUI_DEMO_MARKER("Examples/Menu/Options");
-    if (ImGui::BeginMenu("Options"))
-    {
-        static bool enabled = true;
-        ImGui::MenuItem("Enabled", "", &enabled);
-        ImGui::BeginChild("child", ImVec2(0, 60), ImGuiChildFlags_Borders);
-        for (int i = 0; i < 10; i++)
-            ImGui::Text("Scrolling Text %d", i);
-        ImGui::EndChild();
-        static float f = 0.5f;
-        static int n = 0;
-        ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
-        ImGui::InputFloat("Input", &f, 0.1f);
-        ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
-        ImGui::EndMenu();
-    }
+    //ImGui::Separator();
+    ////IMGUI_DEMO_MARKER("Examples/Menu/Options");
+    //if (ImGui::BeginMenu("Options"))
+    //{
+    //    static bool enabled = true;
+    //    ImGui::MenuItem("Enabled", "", &enabled);
+    //    ImGui::BeginChild("child", ImVec2(0, 60), ImGuiChildFlags_Borders);
+    //    for (int i = 0; i < 10; i++)
+    //        ImGui::Text("Scrolling Text %d", i);
+    //    ImGui::EndChild();
+    //    static float f = 0.5f;
+    //    static int n = 0;
+    //    ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
+    //    ImGui::InputFloat("Input", &f, 0.1f);
+    //    ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
+    //    ImGui::EndMenu();
+    //}
 
-    //IMGUI_DEMO_MARKER("Examples/Menu/Colors");
-    if (ImGui::BeginMenu("Colors"))
-    {
-        float sz = ImGui::GetTextLineHeight();
-        for (int i = 0; i < ImGuiCol_COUNT; i++)
-        {
-            const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
-            ImVec2 p = ImGui::GetCursorScreenPos();
-            ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz), ImGui::GetColorU32((ImGuiCol)i));
-            ImGui::Dummy(ImVec2(sz, sz));
-            ImGui::SameLine();
-            ImGui::MenuItem(name);
-        }
-        ImGui::EndMenu();
-    }
-
-    // Here we demonstrate appending again to the "Options" menu (which we already created above)
-    // Of course in this demo it is a little bit silly that this function calls BeginMenu("Options") twice.
-    // In a real code-base using it would make senses to use this feature from very different code locations.
-    if (ImGui::BeginMenu("Options")) // <-- Append!
-    {
-        //IMGUI_DEMO_MARKER("Examples/Menu/Append to an existing menu");
-        static bool b = true;
-        ImGui::Checkbox("SomeOption", &b);
-        ImGui::EndMenu();
-    }
-
-    if (ImGui::BeginMenu("Disabled", false)) // Disabled
-    {
-        IM_ASSERT(0);
-    }
-    if (ImGui::MenuItem("Checked", NULL, true)) {}
-    ImGui::Separator();
-    if (ImGui::MenuItem("Quit", "Alt+F4")) {}
 }
 
 void Editor::Terminate()
@@ -298,35 +242,14 @@ static void Editor::DemoWindowWidgetsImages()
 {
 
         ImGuiIO& io = ImGui::GetIO();
-        ImGui::TextWrapped(
-            "Below we are displaying the font texture (which is the only texture we have access to in this demo). "
-            "Use the 'ImTextureID' type as storage to pass pointers or identifier to your own texture data. "
-            "Hover the texture for a zoomed view!");
-
-        // Below we are displaying the font texture because it is the only texture we have access to inside the demo!
-        // Read description about ImTextureID/ImTextureRef and FAQ for details about texture identifiers.
-        // If you use one of the default imgui_impl_XXXX.cpp rendering backend, they all have comments at the top
-        // of their respective source file to specify what they are using as texture identifier, for example:
-        // - The imgui_impl_dx11.cpp renderer expect a 'ID3D11ShaderResourceView*' pointer.
-        // - The imgui_impl_opengl3.cpp renderer expect a GLuint OpenGL texture identifier, etc.
-        // So with the DirectX11 backend, you call ImGui::Image() with a 'ID3D11ShaderResourceView*' cast to ImTextureID.
-        // - If you decided that ImTextureID = MyEngineTexture*, then you can pass your MyEngineTexture* pointers
-        //   to ImGui::Image(), and gather width/height through your own functions, etc.
-        // - You can use ShowMetricsWindow() to inspect the draw data that are being passed to your renderer,
-        //   it will help you debug issues if you are confused about it.
-        // - Consider using the lower-level ImDrawList::AddImage() API, via ImGui::GetWindowDrawList()->AddImage().
-        // - Read https://github.com/ocornut/imgui/blob/master/docs/FAQ.md
-        // - Read https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
-
-        // Grab the current texture identifier used by the font atlas.
-        //ImTextureRef my_tex_id = io.Fonts->TexRef;
 
 
         // Regular user code should never have to care about TexData-> fields, but since we want to display the entire texture here, we pull Width/Height from it.
         float my_tex_w = (float)io.Fonts->TexData->Width;
         float my_tex_h = (float)io.Fonts->TexData->Height;
 
-        ImGui::TextWrapped("And now some textured buttons..");
+        ImGui::TextWrapped("");
+
         int textureId = 0;
 
         for (auto textureKey = TextureDirectory::TextureMappings.begin(); textureKey != TextureDirectory::TextureMappings.end(); textureKey++)
@@ -344,7 +267,7 @@ static void Editor::DemoWindowWidgetsImages()
             ImGui::PushID(textureId);
 
             if (textureId > 0)
-                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(textureId - 1.0f, textureId - 1.0f));
+                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1.0f, 1.0f));
             ImVec2 size = ImVec2(32.0f, 32.0f);                         // Size of the image we want to make visible
             ImVec2 uv0 = ImVec2(0.0f, 0.0f);                            // UV coordinates for lower-left
             ImVec2 uv1 = ImVec2(32.0f / my_tex_w, 32.0f / my_tex_h);    // UV coordinates for (32,32) in our texture
@@ -379,16 +302,12 @@ static void Editor::FloorTextureDisplayer()
 {
 
     ImGuiIO& io = ImGui::GetIO();
-    ImGui::TextWrapped(
-        "Below we are displaying the font texture (which is the only texture we have access to in this demo). "
-        "Use the 'ImTextureID' type as storage to pass pointers or identifier to your own texture data. "
-        "Hover the texture for a zoomed view!");
 
     // Regular user code should never have to care about TexData-> fields, but since we want to display the entire texture here, we pull Width/Height from it.
     float my_tex_w = (float)io.Fonts->TexData->Width;
     float my_tex_h = (float)io.Fonts->TexData->Height;
 
-    ImGui::TextWrapped("And now some textured buttons..");
+    ImGui::TextWrapped("");
     int textureId = 0;
 
     for (auto textureKey = TextureDirectory::FloorTextureMappings.begin(); textureKey != TextureDirectory::FloorTextureMappings.end(); textureKey++)
@@ -397,16 +316,11 @@ static void Editor::FloorTextureDisplayer()
         std::string     textureName = textureKey->first;
         TextureMapping  textureMapping = textureKey->second;
 
-        //if (textureKey->second)	    std::cout << "Texture Key: " << textureName << std::endl;
-        //std::cout << textureKey->second << "\n";
         ImTextureID     my_tex_id = TextureDirectory::FloorTextureMappings[textureName].id;
-        // UV coordinates are often (0.0f, 0.0f) and (1.0f, 1.0f) to display an entire textures.
-        // Here are trying to display only a 32x32 pixels area of the texture, hence the UV computation.
-        // Read about UV coordinates here: https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
         ImGui::PushID(textureId);
 
         if (textureId > 0)
-            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(textureId - 1.0f, textureId - 1.0f));
+            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1.0f, 1.0f));
         ImVec2 size = ImVec2(32.0f, 32.0f);                         // Size of the image we want to make visible
         ImVec2 uv0 = ImVec2(0.0f, 0.0f);                            // UV coordinates for lower-left
         ImVec2 uv1 = ImVec2(32.0f / my_tex_w, 32.0f / my_tex_h);    // UV coordinates for (32,32) in our texture
