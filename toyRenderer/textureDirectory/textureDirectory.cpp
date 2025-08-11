@@ -339,3 +339,28 @@ void TextureDirectory::SetFloorTextureMapping(std::string textureType)
 		FloorTextureMappings[textureType].id = LoadTexture(texturePath, false);
 	}
 }
+
+void TextureDirectory::InitializeTextures()
+{
+		
+	TextureDirectory::SetTexture("rusted_metal_base_map", "../images/rusted_metal/rustediron2_basecolor.png", true);
+	TextureDirectory::SetTexture("rusted_metal_metallic_map", "../images/rusted_metal/rustediron2_metallic.png", true);
+	TextureDirectory::SetTexture("rusted_metal_normal_map", "../images/rusted_metal/rustediron2_normal.png", true);
+	TextureDirectory::SetTexture("rusted_metal_roughness_map", "../images/rusted_metal/rustediron2_roughness.png", true);
+	TextureDirectory::SetTexture("rusted_metal_ao_map", "../images/rusted_metal/rustediron2_roughness.png", true);
+
+	TextureDirectory::SetLookupTexture("brdfLUTTexture");
+
+	TextureDirectory::SetTexture("floor", "../images/wood.png", false);
+	TextureDirectory::SetTexture("brick_base_map", "../images/brickwall/brickwall.jpg", false);
+	TextureDirectory::SetTexture("brick_normal_map", "../images/brickwall/brickwall_normal.jpg", false);
+	TextureDirectory::SetTexture("brick_orange_base_map", "../images/bricks/bricks2.jpg", false);
+	TextureDirectory::SetTexture("brick_orange_normal_map", "../images/bricks/bricks2_normal.jpg", false);
+
+	TextureDirectory::SetHDRTexture("photo_studio", "../images/hdr/photo_studio_loft_hall_4k.hdr");
+	TextureDirectory::SetHDRTexture("sky", "../images/hdr/rustig_koppie_puresky_8k.hdr");
+	TextureDirectory::SetHDRTexture("field", "../images/hdr/horn-koppe_spring_4k.hdr");
+	TextureDirectory::SetHDRTexture("loft", "../images/hdr/newport_loft.hdr");
+
+
+};

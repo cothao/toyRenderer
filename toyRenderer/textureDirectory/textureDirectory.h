@@ -43,7 +43,7 @@ namespace TextureDirectory
 	void BindMapTextures(unsigned int base, unsigned int metallic, unsigned int normal, unsigned int roughness, unsigned int ao);
 	void SetHDRTextureFromFile();
 	void Unbind2DMaps();
-
+	void InitializeTextures();
 }
 
 #endif
