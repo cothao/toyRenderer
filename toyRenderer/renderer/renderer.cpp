@@ -242,6 +242,10 @@ void Renderer::DrawModel(std::string modelName, std::string shaderName)
 
 void Renderer::DrawModels(std::string shaderName) 
 {
+
+	ShaderDirectory::GetShader(shaderName).SetMat4("model", model);
+	ShaderDirectory::GetShader(shaderName).SetMat4("view", view);
+
 	for (auto modelKey = ModelDirectory::Directory.begin(); modelKey != ModelDirectory::Directory.end(); modelKey++)
 	{
 		std::string modelName = modelKey->first;
@@ -398,8 +402,6 @@ void Renderer::ObjectPass()
 	model = glm::rotate(model, ModelDirectory::rotation.x, glm::vec3(1., 0., 0.));
 	model = glm::rotate(model, ModelDirectory::rotation.y, glm::vec3(0., 1., 0.));
 	model = glm::rotate(model, ModelDirectory::rotation.z, glm::vec3(0., 0., 1.));
-
-	ShaderDirectory::GetShader("pbrMaterial").SetMat4("model", model);
 
 	DrawModels(currentShader);
 
